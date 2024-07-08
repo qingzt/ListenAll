@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
 
 import '../../common/api/index.dart';
+import '../../common/api/search/netease.dart';
 import '../../common/models/index.dart';
 import '../../common/services/index.dart';
 
 class NetworkSearchController extends GetxController {
   NetworkSearchController(this._searchQuery);
-  SearchProvider currentSearchProvider = BilibiliSearchProvider();
+  SearchProvider currentSearchProvider = NeteaseSearchProvider();
   final String _searchQuery;
 
   initData() async {

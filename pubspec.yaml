@@ -56,6 +56,12 @@ dependencies:
   modal_bottom_sheet: ^3.0.0
   pull_to_refresh: ^2.0.0
   cached_network_image: ^3.3.1
+  dio_cookie_manager: ^3.1.1
+  cookie_jar: ^4.0.8
+  encrypt: ^5.0.3
+  crypto: ^3.0.3
+  pointycastle: ^3.9.1
+  hex: ^0.2.0
 
 dev_dependencies:
   flutter_test:

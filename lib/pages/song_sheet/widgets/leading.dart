@@ -23,6 +23,10 @@ class Leading extends StatelessWidget {
                 _.leadingSongInfo == null
                     ? Image.asset('assets/img/default_album.png')
                     : CachedNetworkImage(
+                        httpHeaders: const {
+                          'User-Agent':
+                              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+                        },
                         fit: BoxFit.cover,
                         height: MediaQuery.of(context).size.height * 0.3,
                         width: MediaQuery.of(context).size.width,
@@ -51,6 +55,10 @@ class Leading extends StatelessWidget {
                         child: _.leadingSongInfo == null
                             ? Image.asset('assets/img/default_album.png')
                             : CachedNetworkImage(
+                                httpHeaders: const {
+                                  'User-Agent':
+                                      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+                                },
                                 fit: BoxFit.cover,
                                 height:
                                     MediaQuery.of(context).size.height * 0.2,

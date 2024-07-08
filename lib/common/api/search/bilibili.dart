@@ -1,19 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:media_kit/media_kit.dart';
+import 'package:listenall/common/api/dio_groups.dart';
 
 import '../../models/music_basic_info.dart';
 import '../../models/song_with_source.dart';
-import '../audio_source/bilibili.dart';
 import 'search_provider.dart';
 
 class BilibiliSearchProvider extends SearchProvider {
   @override
   Future<List<SongWithSource>?> search(String query, {int page = 1}) async {
-    final Dio dio = Dio();
-    dio.options.headers['user-agent'] =
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
-    dio.options.headers['referer'] = 'https://www.bilibili.com/';
-    dio.options.headers['cookie'] = 'SESSDATA=xxx';
+    final Dio dio = DioGroups().bilibili;
     try {
       var dataResponse = await dio.get(
           'https://api.bilibili.com/x/web-interface/search/type?search_type=video&keyword=$query&page=$page');
@@ -38,10 +33,5 @@ class BilibiliSearchProvider extends SearchProvider {
       print("caught: $e");
     }
     return null;
-  }
-
-  @override
-  Future<Media?> getMedia(String id) async {
-    return BilibiliAudioSourceProvider(id).getMedia();
   }
 }

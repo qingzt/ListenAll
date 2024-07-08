@@ -1,3 +1,5 @@
+import 'package:listenall/common/api/music_info/netease.dart';
+
 import '../../models/music_info.dart';
 import 'bilibili.dart';
 
@@ -6,6 +8,8 @@ abstract class MusicInfoProvider {
     switch (source) {
       case 'bilibili':
         return BilibiliMusicInfoProvider(id);
+      case 'netease':
+        return NeteaseMusicInfoProvider(id);
       default:
         return DefaultMusicInfoProvider(id);
     }

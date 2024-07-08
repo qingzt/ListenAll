@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.0"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      sha256: "58082b3f0dca697204dbab0ef9ff208bfaea7767ea771076af9a343488428dda"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.3"
   async:
     dependency: transitive
     description:
@@ -289,8 +297,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  cookie_jar:
+    dependency: "direct main"
+    description:
+      name: cookie_jar
+      sha256: a6ac027d3ed6ed756bfce8f3ff60cb479e266f3b0fdabd6242b804b6765e52de
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.8"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       sha256: ff625774173754681d66daaf4a448684fb04b78f902da9cb3d308c19cc5e8bab
@@ -345,6 +361,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.3+1"
+  dio_cookie_manager:
+    dependency: "direct main"
+    description:
+      name: dio_cookie_manager
+      sha256: e79498b0f632897ff0c28d6e8178b4bc6e9087412401f618c31fa0904ace050d
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   drift:
     dependency: "direct main"
     description:
@@ -369,6 +393,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.7.0"
+  encrypt:
+    dependency: "direct main"
+    description:
+      name: encrypt
+      sha256: "62d9aa4670cc2a8798bab89b39fc71b6dfbacf615de6cf5001fb39f7e4a996a2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -464,6 +496,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  hex:
+    dependency: "direct main"
+    description:
+      name: hex
+      sha256: "4e7cd54e4b59ba026432a6be2dd9d96e4c5205725194997193bf871703b82c4a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   hive:
     dependency: "direct main"
     description:
@@ -848,6 +888,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  pointycastle:
+    dependency: "direct main"
+    description:
+      name: pointycastle
+      sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.9.1"
   pool:
     dependency: transitive
     description:
@@ -1109,6 +1157,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  universal_io:
+    dependency: transitive
+    description:
+      name: universal_io
+      sha256: "1722b2dcc462b4b2f3ee7d188dad008b6eb4c40bbd03a3de451d82c78bba9aad"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.2"
   universal_platform:
     dependency: transitive
     description:
