@@ -1,0 +1,72 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@main
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@main
+      with:
+        channel: 'stable'
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build Apk
+      run: lutter build apk --split-per-abi
+
+    - name : After Apk Build
+      run: call ..\..\..\..\after_apk_build.bat
+      working-directory: build\app\outputs\flutter-apk
+
+    - name: Build Desktop
+      run: flutter build windows  # 或者使用其他平台的命令，例如 flutter build macos 或 flutter build linux
+
+    - name: After Windows Build
+      run:  call ..\..\..\..\..\after_windows_build.bat
+      working-directory: build\windows\x64\runner\Release\
+    
+    - name: Install Node.js
+      uses: actions/setup-node@main
+      with:
+        node-version: '14'
+  
+    - name: Install dependencies
+      run: npm install -g bestzip
+
+    - name: Create desktop ZIP file
+      run: bestzip ..\..\..\..\..\listenall-x86-64-windows.zip *
+      working-directory: build\windows\x64\runner\Release\
+
+    - name: Build Changelog
+      id: github_release
+      uses: mikepenz/release-changelog-builder-action@v4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: ListenAll ${{ github.ref_name }}
+        body: ${{steps.github_release.outputs.changelog}}
+        draft: false
+        prerelease: false
+        files: |
+          build\app\outputs\flutter-apk\app-armeabi-v7a-release.apk
+          build\app\outputs\flutter-apk\app-arm64-v8a-release.apk
+          build\app\outputs\flutter-apk\app-x86_64-release.apk
+          listenall-x86-64-windows.zip
+            
