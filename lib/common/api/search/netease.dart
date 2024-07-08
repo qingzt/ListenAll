@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/icon.dart';
 import '../../models/index.dart';
 import '../dio_groups.dart';
 import '../index.dart';
@@ -34,5 +36,10 @@ class NeteaseSearchProvider extends SearchProvider {
       print("caught: $e");
     }
     return null;
+  }
+
+  @override
+  Icon getSearchIcon() {
+    return const Icon(IconData(60285, fontFamily: 'BiliBili_Netease'));
   }
 }

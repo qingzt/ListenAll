@@ -120,6 +120,9 @@ class AudioService extends GetxService {
   }
 
   Future<void> _setSource({bool autoPlay = true}) async {
+    if (_currentPlayListItemIndex < 0) {
+      _currentPlayListItemIndex = 0;
+    }
     if (_playlist.length <= _currentPlayListItemIndex) {
       _currentPlayListItemIndex = 0;
       return;
@@ -229,6 +232,7 @@ class AudioService extends GetxService {
       _currentPlayListItemIndex = _playlist.length - 1;
       _setSource();
     } else {
+      print(_playlist.indexWhere((element) => element.basicInfo == song));
       _currentPlayListItemIndex =
           _playlist.indexWhere((element) => element.basicInfo == song);
       _setSource();

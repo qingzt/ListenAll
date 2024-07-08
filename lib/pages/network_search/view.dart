@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -10,13 +9,11 @@ import 'widgets/choose_song_sheet_dialog.dart';
 import 'widgets/search_page_search_bar.dart';
 
 class NetworkSearchPage extends StatelessWidget {
-  NetworkSearchPage({super.key});
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  const NetworkSearchPage({super.key});
   @override
   Widget build(BuildContext context) {
     final searchQuery = Get.parameters['query'] ?? '';
-
+    Get.put(NetworkSearchController(searchQuery));
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const ListenAllAppBar(),
@@ -30,16 +27,12 @@ class NetworkSearchPage extends StatelessWidget {
               builder: (_) {
                 return Expanded(
                     child: SmartRefresher(
+                  controller: _.refreshController,
                   enablePullUp: true,
-                  onRefresh: () async {
-                    await _.initData();
-                    _refreshController.refreshCompleted();
+                  onRefresh: () {
+                    _.search(searchQuery);
                   },
-                  onLoading: () async {
-                    await _.nextPage();
-                    _refreshController.loadComplete();
-                  },
-                  controller: _refreshController,
+                  onLoading: _.nextPage,
                   child: ListView.builder(
                     itemCount: _.searchResult.length,
                     itemBuilder: (context, index) {

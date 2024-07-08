@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../common/api/index.dart';
 import '../../common/api/search/netease.dart';
@@ -7,8 +8,14 @@ import '../../common/services/index.dart';
 
 class NetworkSearchController extends GetxController {
   NetworkSearchController(this._searchQuery);
-  SearchProvider currentSearchProvider = NeteaseSearchProvider();
+  int currentSourceIndex = 0;
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: true);
   final String _searchQuery;
+  final List<SearchProvider> allSources = [
+    NeteaseSearchProvider(),
+    BilibiliSearchProvider(),
+  ];
 
   initData() async {
     songSheets = await DatabaseService.to.getSongSheets();
@@ -16,6 +23,13 @@ class NetworkSearchController extends GetxController {
   }
 
   void onTap() {}
+
+  void changeSource(SearchProvider source) {
+    final index = allSources.indexWhere((element) => element == source);
+    currentSourceIndex = index;
+    update(['searchBar']);
+    search(_searchQuery);
+  }
 
   // @override
   // void onInit() {
@@ -26,7 +40,6 @@ class NetworkSearchController extends GetxController {
   void onReady() {
     super.onReady();
     initData();
-    search(_searchQuery);
   }
 
   // @override
@@ -42,7 +55,7 @@ class NetworkSearchController extends GetxController {
   void search(String query) async {
     page = 1;
     isSearching = true;
-    currentSearchProvider.search(query).then((value) {
+    allSources[currentSourceIndex].search(query).then((value) {
       if (value != null) {
         searchResult = value;
         isSearching = false;
@@ -51,6 +64,7 @@ class NetworkSearchController extends GetxController {
         isSearching = false;
         update();
       }
+      refreshController.refreshCompleted();
     });
   }
 
@@ -58,12 +72,14 @@ class NetworkSearchController extends GetxController {
     if (isLoadMore) return;
     isLoadMore = true;
     page++;
-    final res = await currentSearchProvider.search(_searchQuery, page: page);
+    final res =
+        await allSources[currentSourceIndex].search(_searchQuery, page: page);
     if (res != null) {
       searchResult.addAll(res);
       isLoadMore = false;
       update();
     }
+    refreshController.loadComplete();
   }
 
   void addToPlayList(SongWithSource songInfo) async {

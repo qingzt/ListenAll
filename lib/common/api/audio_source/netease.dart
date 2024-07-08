@@ -10,23 +10,28 @@ class NeteaseAudioSourceProvider implements AudioSourceProvider {
   String id;
   @override
   Future<Media?> getMedia() async {
-    var response = await DioGroups().netease.post(
-      '/api/song/enhance/player/url',
-      data: {
-        'data': {
-          'ids': [id],
-          'br': 999000,
-        },
-        'options': {
-          'cookie': {
-            'os': 'pc',
+    try {
+      var response = await DioGroups().netease.post(
+        '/api/song/enhance/player/url',
+        data: {
+          'data': {
+            'ids': [id],
+            'br': 999000,
           },
-          'crypto': 'eapi'
-        }
-      },
-    );
-    var data = jsonDecode(response.data);
-    String url = data['data'][0]['url'];
-    return Media(url);
+          'options': {
+            'cookie': {
+              'os': 'pc',
+            },
+            'crypto': 'eapi'
+          }
+        },
+      );
+      var data = jsonDecode(response.data);
+      String url = data['data'][0]['url'];
+      return Media(url);
+    } on Exception catch (e) {
+      print(e);
+    }
+    return null;
   }
 }

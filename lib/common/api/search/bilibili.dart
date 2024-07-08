@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/icon.dart';
 import 'package:listenall/common/api/dio_groups.dart';
 
 import '../../models/music_basic_info.dart';
@@ -33,5 +35,10 @@ class BilibiliSearchProvider extends SearchProvider {
       print("caught: $e");
     }
     return null;
+  }
+
+  @override
+  Icon getSearchIcon() {
+    return const Icon(IconData(58889, fontFamily: 'BiliBili_Netease'));
   }
 }
