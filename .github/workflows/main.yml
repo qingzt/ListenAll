@@ -37,14 +37,14 @@ jobs:
       run: flutter build apk --split-per-abi
 
     - name : After Apk Build
-      run: call ..\..\..\..\after_apk_build.bat
+      run: ..\..\..\..\after_apk_build.bat
       working-directory: build\app\outputs\flutter-apk
 
     - name: Build Desktop
       run: flutter build windows  # 或者使用其他平台的命令，例如 flutter build macos 或 flutter build linux
 
     - name: After Windows Build
-      run:  call ..\..\..\..\..\after_windows_build.bat
+      run:  ..\..\..\..\..\after_windows_build.bat
       working-directory: build\windows\x64\runner\Release\
     
     - name: Install Node.js
