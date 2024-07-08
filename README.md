@@ -6,4 +6,4 @@
 * 多平台支持
   * 理论适配Android、Windows、IOS、Linux、MACOS
 * 支持多音源
-  * 目前支持BiliBili，后续将支持更多音源
+  * 目前支持BiliBili音乐、网易云音乐，后续将支持更多音源
