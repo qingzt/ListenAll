@@ -31,7 +31,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin' # See 'Supported distributions' for available options
-        java-version: '11'
+        java-version: '17'
 
     - name: Build Apk
       run: flutter build apk --split-per-abi
