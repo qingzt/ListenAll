@@ -26,8 +26,30 @@ class AudioService extends GetxService {
       }
       next();
     });
+    _player.stream.playlist.listen((event) {
+      _playlist[_currentPlayListItemIndex]
+          .infos[0]
+          .getMusicInfo()
+          .then((value) {
+        if (value != null) {
+          value.album = _playlist[_currentPlayListItemIndex].basicInfo.album;
+          value.title = _playlist[_currentPlayListItemIndex].basicInfo.title;
+          value.artist = _playlist[_currentPlayListItemIndex].basicInfo.artist;
+        }
+        _currentMusicInfoController.add(value);
+        currentMusicInfo = value;
+      });
+      _playlistItemIndexController.add(_currentPlayListItemIndex);
+      currentPlayListItemIndex = _currentPlayListItemIndex;
+      DatabaseService.to
+          .isLike(_playlist[_currentPlayListItemIndex].basicInfo)
+          .then((value) {
+        _isLikeController.add(value);
+        isLike = value;
+      });
+    });
     await _flushPlayList();
-    await _setSource(autoPlay: false);
+    _setSource(autoPlay: false);
     currentPlayListItemIndex = _currentPlayListItemIndex;
     return this;
   }
@@ -83,22 +105,11 @@ class AudioService extends GetxService {
   List<PlayableItem> _playlist = [];
   int get _currentPlayListItemIndex =>
       DatabaseService.to.currentPlayListItemIndex;
-  int currentPlayListItemIndex = 0;
-
-  set _currentPlayListItemIndex(int value) {
-    if (value < 0) {
-      DatabaseService.to.currentPlayListItemIndex = 0;
-      return;
-    }
-    if (_currentPlayListItemIndex != value) {
-      DatabaseService.to.currentPlayListItemIndex = value;
-      _playlistItemIndexController.add(_currentPlayListItemIndex);
-      DatabaseService.to.isLike(_playlist[value].basicInfo).then((value) {
-        _isLikeController.add(value);
-      });
-    }
+  set _currentPlayListItemIndex(int index) {
+    DatabaseService.to.currentPlayListItemIndex = index;
   }
 
+  int currentPlayListItemIndex = 0;
   int playMode = 0;
   // 0: repeat
   // 1: random
@@ -115,21 +126,8 @@ class AudioService extends GetxService {
     }
     final meida =
         await _playlist[_currentPlayListItemIndex].sources[0].getMedia();
-    final musicInfo =
-        await _playlist[_currentPlayListItemIndex].infos[0].getMusicInfo();
-    if (musicInfo != null) {
-      musicInfo.title = _playlist[_currentPlayListItemIndex].basicInfo.title;
-      musicInfo.artist = _playlist[_currentPlayListItemIndex].basicInfo.artist;
-      musicInfo.album = _playlist[_currentPlayListItemIndex].basicInfo.album;
-    }
-    _currentMusicInfoController.add(musicInfo);
-    currentMusicInfo = musicInfo;
-
     if (meida == null) return;
     await _player.open(meida, play: autoPlay);
-
-    isLike = await DatabaseService.to
-        .isLike(_playlist[_currentPlayListItemIndex].basicInfo);
   }
 
   Future<void> playOrPause() async {
@@ -149,14 +147,14 @@ class AudioService extends GetxService {
     switch (playMode) {
       case 0:
         _currentPlayListItemIndex =
-            (_currentPlayListItemIndex + 1) % _playlist.length;
+            (currentPlayListItemIndex + 1) % _playlist.length;
         break;
       case 1:
         _currentPlayListItemIndex = Random().nextInt(_playlist.length);
         break;
       case 2:
         _currentPlayListItemIndex =
-            (_currentPlayListItemIndex + 1) % _playlist.length;
+            (currentPlayListItemIndex + 1) % _playlist.length;
       default:
     }
     await _setSource();
@@ -167,7 +165,7 @@ class AudioService extends GetxService {
     switch (playMode) {
       case 0:
         _currentPlayListItemIndex =
-            (_currentPlayListItemIndex - 1 + _playlist.length) %
+            (currentPlayListItemIndex - 1 + _playlist.length) %
                 _playlist.length;
         break;
       case 1:
@@ -175,7 +173,7 @@ class AudioService extends GetxService {
         break;
       case 2:
         _currentPlayListItemIndex =
-            (_currentPlayListItemIndex - 1 + _playlist.length) %
+            (currentPlayListItemIndex - 1 + _playlist.length) %
                 _playlist.length;
         break;
       default:
