@@ -61,6 +61,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(PlayerController());
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: const ListenAllAppBar(),
       body: SafeArea(
         child: GetBuilder<HomeController>(

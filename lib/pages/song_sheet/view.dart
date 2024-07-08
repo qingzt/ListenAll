@@ -18,6 +18,7 @@ class SongSheetPage extends StatelessWidget {
       id: "song_sheet",
       builder: (_) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: const ListenAllAppBar(),
           body: SafeArea(
               child: Column(

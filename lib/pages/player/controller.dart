@@ -46,11 +46,11 @@ class PlayerController extends GetxController {
     playedDurationSubscription =
         audioService.playedDurationStream.listen((event) {
       playedDuration = event;
-      update(['progressIndicator']);
+      update(['progressIndicator', 'lyrics']);
     });
     audioService.totalDurationStream.listen((event) {
       totalDuration = event;
-      update(['progressIndicator']);
+      update(['progressIndicator', 'lyrics']);
     });
     audioService.bufferedDurationStream.listen((event) {
       bufferedDuration = event;
@@ -58,7 +58,7 @@ class PlayerController extends GetxController {
     });
     audioService.currentMusicInfoStream.listen((event) {
       currentMusicInfo = event;
-      update(['musicInfo', 'playBar']);
+      update(['musicInfo', 'playBar', 'lyrics']);
     });
     audioService.playlistStream.listen((event) {
       playList = event;

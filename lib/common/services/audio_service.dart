@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
-
 import '../models/index.dart';
 import 'database_service.dart';
 
@@ -35,6 +33,8 @@ class AudioService extends GetxService {
           value.album = _playlist[_currentPlayListItemIndex].basicInfo.album;
           value.title = _playlist[_currentPlayListItemIndex].basicInfo.title;
           value.artist = _playlist[_currentPlayListItemIndex].basicInfo.artist;
+        } else {
+          tryNextInfo();
         }
         _currentMusicInfoController.add(value);
         currentMusicInfo = value;
@@ -129,7 +129,10 @@ class AudioService extends GetxService {
     }
     final meida =
         await _playlist[_currentPlayListItemIndex].sources[0].getMedia();
-    if (meida == null) return;
+    if (meida == null) {
+      tryNextSource();
+      return;
+    }
     await _player.open(meida, play: autoPlay);
   }
 
@@ -161,6 +164,24 @@ class AudioService extends GetxService {
       default:
     }
     await _setSource();
+  }
+
+  void tryNextSource() {
+    if (_playlist[_currentPlayListItemIndex].currentSourceIndex <
+        _playlist[_currentPlayListItemIndex].sources.length - 1) {
+      _playlist[_currentPlayListItemIndex].currentSourceIndex++;
+      _setSource();
+    } else {
+      next();
+    }
+  }
+
+  void tryNextInfo() {
+    if (_playlist[_currentPlayListItemIndex].currentInfoIndex <
+        _playlist[_currentPlayListItemIndex].infos.length - 1) {
+      _playlist[_currentPlayListItemIndex].currentInfoIndex++;
+      _setSource();
+    }
   }
 
   Future<void> previous() async {

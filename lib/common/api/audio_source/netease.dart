@@ -27,7 +27,10 @@ class NeteaseAudioSourceProvider implements AudioSourceProvider {
         },
       );
       var data = jsonDecode(response.data);
-      String url = data['data'][0]['url'];
+      String? url = data['data'][0]['url'];
+      if (url == null) {
+        return null;
+      }
       return Media(url);
     } on Exception catch (e) {
       print(e);
