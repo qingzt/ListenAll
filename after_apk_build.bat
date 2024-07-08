@@ -16,6 +16,7 @@ for /f %%f in ('dir /b *.apk') do (
 
     rem 重命名文件
     ren "%%f" "!newname!"
+    echo "%%f" renamed to "!newname!"
 )
 
 endlocal

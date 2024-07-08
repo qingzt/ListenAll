@@ -9,6 +9,10 @@ jobs:
   build-and-release:
     runs-on: windows-latest
 
+    permissions:
+      contents: write   # 对仓库内容的读写权限
+      discussions: write
+
     steps:
     - name: Checkout Repository
       uses: actions/checkout@main
@@ -62,14 +66,10 @@ jobs:
     - name: Build Changelog
       id: github_release
       uses: mikepenz/release-changelog-builder-action@v4
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref_name }}
         name: ListenAll ${{ github.ref_name }}
