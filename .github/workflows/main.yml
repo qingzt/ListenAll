@@ -22,7 +22,7 @@ jobs:
       run: flutter pub get
 
     - name: Build Apk
-      run: lutter build apk --split-per-abi
+      run: flutter build apk --split-per-abi
 
     - name : After Apk Build
       run: call ..\..\..\..\after_apk_build.bat
