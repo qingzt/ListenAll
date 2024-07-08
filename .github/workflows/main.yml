@@ -21,6 +21,12 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
+    - name: Setup Java
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin' # See 'Supported distributions' for available options
+        java-version: '11'
+
     - name: Build Apk
       run: flutter build apk --split-per-abi
 
