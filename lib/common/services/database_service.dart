@@ -419,11 +419,11 @@ class DatabaseService extends GetxService {
             o.title.equals(info.title) &
             o.artist.equals(info.artist) &
             o.album.equals(info.album))
-        .getSingleOrNull();
-    if (res == null) {
+        .get();
+    if (res.isEmpty) {
       return null;
     }
-    return MusicInfoProvider(res.sourceType, res.sourceId).getMusicInfo();
+    return MusicInfoProvider(res[0].sourceType, res[0].sourceId).getMusicInfo();
   }
 
   Future<bool> changeCurrentPlaylist(List<BasicMusicInfo> songs) async {
