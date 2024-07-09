@@ -67,14 +67,13 @@ jobs:
       id: github_release
       uses: mikepenz/release-changelog-builder-action@v4
       with: 
-        commitMode: true
         configurationJson: |
             {
-              "template": "#{{CHANGELOG}}",
+              "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
               "categories": [
                 {
                     "title": "## 🚀 Features",
-                    "labels": ["feat", "feature"]
+                    "labels": ["feat", "feature", "enhancement"]
                 },
                 {
                     "title": "## 🐛 Fixes",
@@ -92,12 +91,6 @@ jobs:
                     "title": "## 💬 Other",
                     "labels": ["other"]
                 },
-              ],
-              "label_extractor": [
-                {
-                  "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
-                  "target": "$1"
-                }
               ],
             }
 
