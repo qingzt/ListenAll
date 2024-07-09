@@ -1,7 +1,7 @@
-import 'package:listenall/common/models/music_info.dart';
+import '../api/index.dart';
 
 class SongSheet {
   String name;
-  MusicInfo? newInfo;
-  SongSheet({required this.name, required this.newInfo});
+  MusicInfoProvider? newInfo;
+  SongSheet({required this.name, this.newInfo});
 }

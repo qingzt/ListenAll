@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:get/get.dart';
+import 'package:listenall/common/models/music_info.dart';
 import 'package:listenall/common/widgets/snack_bar.dart';
 import 'package:media_kit/media_kit.dart';
 import '../models/index.dart';
@@ -31,16 +32,15 @@ class AudioService extends GetxService {
           .infos[0]
           .getMusicInfo()
           .then((value) {
-        if (value != null) {
-          value.album = _playlist[_currentPlayListItemIndex].basicInfo.album;
-          value.title = _playlist[_currentPlayListItemIndex].basicInfo.title;
-          value.artist = _playlist[_currentPlayListItemIndex].basicInfo.artist;
-        } else {
+        if (value == null) {
           tryNextInfo();
         }
-        _currentMusicInfoController.add(value);
-        currentMusicInfo = value;
+        currentMusicInfo?.extendInfo = value!;
+        __currentMusicInfoController.add(currentMusicInfo);
       });
+      currentMusicInfo =
+          MusicInfo(basicInfo: _playlist[_currentPlayListItemIndex].basicInfo);
+      __currentMusicInfoController.add(currentMusicInfo);
       _playlistItemIndexController.add(_currentPlayListItemIndex);
       currentPlayListItemIndex = _currentPlayListItemIndex;
       DatabaseService.to
@@ -51,7 +51,7 @@ class AudioService extends GetxService {
       });
     });
     await _flushPlayList();
-    _setSource(autoPlay: false);
+    await _setSource(autoPlay: false);
     currentPlayListItemIndex = _currentPlayListItemIndex;
     return this;
   }
@@ -80,7 +80,7 @@ class AudioService extends GetxService {
   Stream<Duration> get bufferedDurationStream => _player.stream.buffer;
 
   Stream<MusicInfo?> get currentMusicInfoStream =>
-      _currentMusicInfoController.stream;
+      __currentMusicInfoController.stream;
 
   Stream<List<PlayableItem>> get playlistStream => _playlistController.stream;
 
@@ -93,7 +93,7 @@ class AudioService extends GetxService {
   final StreamController<int> _playModeController =
       StreamController<int>.broadcast();
 
-  final StreamController<MusicInfo?> _currentMusicInfoController =
+  final StreamController<MusicInfo?> __currentMusicInfoController =
       StreamController<MusicInfo?>.broadcast();
 
   final StreamController<List<PlayableItem>> _playlistController =
@@ -223,7 +223,7 @@ class AudioService extends GetxService {
 
   void stop() {
     _player.stop();
-    _currentMusicInfoController.add(null);
+    __currentMusicInfoController.add(null);
   }
 
   void removePlaylistItem(int index) async {
@@ -244,7 +244,7 @@ class AudioService extends GetxService {
     _playlistController.add(_playlist);
   }
 
-  Future<bool> add2CurrentPlayList(MusicBasicInfo song) async {
+  Future<bool> add2CurrentPlayList(BasicMusicInfo song) async {
     var res = await DatabaseService.to.add2CurrentPlaylist(song);
     if (res) {
       _flushPlayList();
@@ -252,14 +252,13 @@ class AudioService extends GetxService {
     return res;
   }
 
-  Future<bool> add2CurrentPlayListAndPlay(MusicBasicInfo song) async {
+  Future<bool> add2CurrentPlayListAndPlay(BasicMusicInfo song) async {
     var res = await DatabaseService.to.add2CurrentPlaylist(song);
     if (res) {
       await _flushPlayList();
       _currentPlayListItemIndex = _playlist.length - 1;
       _setSource();
     } else {
-      print(_playlist.indexWhere((element) => element.basicInfo == song));
       _currentPlayListItemIndex =
           _playlist.indexWhere((element) => element.basicInfo == song);
       _setSource(tryNext: false);
@@ -267,7 +266,7 @@ class AudioService extends GetxService {
     return res;
   }
 
-  Future<bool> add2CurrentPlayNext(MusicBasicInfo song) async {
+  Future<bool> add2CurrentPlayNext(BasicMusicInfo song) async {
     var res = await DatabaseService.to
         .add2CurrentPlaylistByIndex(song, _currentPlayListItemIndex + 1);
     if (res) {
@@ -283,7 +282,7 @@ class AudioService extends GetxService {
     isLike = res;
   }
 
-  Future<void> changePlaylist(List<MusicBasicInfo> songs) async {
+  Future<void> changePlaylist(List<BasicMusicInfo> songs) async {
     await DatabaseService.to.changeCurrentPlaylist(songs);
     await _flushPlayList();
   }

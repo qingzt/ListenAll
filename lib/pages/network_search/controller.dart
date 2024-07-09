@@ -91,7 +91,9 @@ class NetworkSearchController extends GetxController {
   }
 
   Future<bool> add2AllSongFromSearch(SongWithSource song) async {
-    final res1 = await AudioSourceProvider(song.sourceType, song.id).getMedia();
+    final res1 = await AudioSourceProvider(
+            song.audioSources[0].sourceType, song.audioSources[0].sourceId)
+        .getMedia();
     if (res1 == null) {
       MySnackBar.show(message: '歌曲可能需要会员', title: '无法播放该歌曲');
       return false;

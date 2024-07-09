@@ -1,13 +1,13 @@
 import 'music_basic_info.dart';
+import 'source_item.dart';
 
 class SongWithSource {
-  MusicBasicInfo basicInfo;
-  final String id;
-  final String sourceType;
+  BasicMusicInfo basicInfo;
+  List<SourceItem> audioSources;
+  List<SourceItem> musicInfos;
 
-  SongWithSource({
-    required this.basicInfo,
-    required this.id,
-    required this.sourceType,
-  });
+  SongWithSource(
+      {required this.basicInfo,
+      required this.audioSources,
+      required this.musicInfos});
 }

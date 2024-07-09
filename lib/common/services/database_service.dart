@@ -30,7 +30,7 @@ class DatabaseService extends GetxService {
   set currentPlayListItemIndex(int value) =>
       box.put('currentPlayListItemIndex', value);
 
-  Future<bool> add2AllSong(MusicBasicInfo song) async {
+  Future<bool> add2AllSong(BasicMusicInfo song) async {
     var res = await database.managers.allSongs
         .filter((o) =>
             o.title.equals(song.title) &
@@ -45,7 +45,7 @@ class DatabaseService extends GetxService {
     return true;
   }
 
-  Future<bool> removeFromAllSong(MusicBasicInfo song) async {
+  Future<bool> removeFromAllSong(BasicMusicInfo song) async {
     var res = await database.managers.allSongs
         .filter((o) =>
             o.title.equals(song.title) &
@@ -85,22 +85,24 @@ class DatabaseService extends GetxService {
             o.album.equals(basicInfo.album))
         .orderBy((o) => o.id.asc())
         .get();
-    for (var item in res2) {
-      if (item.sourceType == song.sourceType && item.sourceId == song.id) {
-        return false;
-      }
-    }
     int priority = 0;
     if (res2.isNotEmpty) {
       priority = res2.last.priority + 1;
     }
-    database.managers.allAudioSources.create((o) => o(
-        album: basicInfo.album,
-        artist: basicInfo.artist,
-        title: basicInfo.title,
-        sourceType: song.sourceType,
-        sourceId: song.id,
-        priority: priority));
+    try {
+      for (var item in song.audioSources) {
+        database.managers.allAudioSources.create((o) => o(
+            album: basicInfo.album,
+            artist: basicInfo.artist,
+            title: basicInfo.title,
+            sourceType: item.sourceType,
+            sourceId: item.sourceId,
+            priority: priority));
+        priority++;
+      }
+    } catch (e) {
+      return false;
+    }
     return true;
   }
 
@@ -125,26 +127,28 @@ class DatabaseService extends GetxService {
             o.album.equals(basicInfo.album))
         .orderBy((o) => o.id.asc())
         .get();
-    for (var item in res2) {
-      if (item.sourceType == song.sourceType && item.sourceId == song.id) {
-        return false;
-      }
-    }
     int priority = 0;
     if (res2.isNotEmpty) {
       priority = res2.last.priority + 1;
     }
-    database.managers.allMusicInfos.create((o) => o(
-        album: basicInfo.album,
-        artist: basicInfo.artist,
-        title: basicInfo.title,
-        sourceType: song.sourceType,
-        sourceId: song.id,
-        priority: priority));
+    try {
+      for (var item in song.musicInfos) {
+        database.managers.allMusicInfos.create((o) => o(
+            album: basicInfo.album,
+            artist: basicInfo.artist,
+            title: basicInfo.title,
+            sourceType: item.sourceType,
+            sourceId: item.sourceId,
+            priority: priority));
+        priority++;
+      }
+    } catch (e) {
+      return false;
+    }
     return true;
   }
 
-  Future<bool> add2CurrentPlaylist(MusicBasicInfo song) async {
+  Future<bool> add2CurrentPlaylist(BasicMusicInfo song) async {
     var res = await database.managers.currentPlaylistItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -165,7 +169,7 @@ class DatabaseService extends GetxService {
   }
 
   Future<bool> add2CurrentPlaylistByIndex(
-      MusicBasicInfo song, int index) async {
+      BasicMusicInfo song, int index) async {
     var res = await database.managers.currentPlaylistItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -216,7 +220,7 @@ class DatabaseService extends GetxService {
           .map((e) => MusicInfoProvider(e.sourceType, e.sourceId))
           .toList();
       res.add(PlayableItem(
-        basicInfo: MusicBasicInfo(
+        basicInfo: BasicMusicInfo(
             album: item.album, artist: item.artist, title: item.title),
         sources: musicSources,
         infos: musicInfos,
@@ -225,7 +229,7 @@ class DatabaseService extends GetxService {
     return res;
   }
 
-  Future<void> removeCurrentPlaylistItem(MusicBasicInfo song) async {
+  Future<void> removeCurrentPlaylistItem(BasicMusicInfo song) async {
     CurrentPlaylistItem? current = (await database.managers.currentPlaylistItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -246,7 +250,7 @@ class DatabaseService extends GetxService {
         .delete();
   }
 
-  Future<bool> likeOrUnlike(MusicBasicInfo song) async {
+  Future<bool> likeOrUnlike(BasicMusicInfo song) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -278,7 +282,7 @@ class DatabaseService extends GetxService {
     return true;
   }
 
-  Future<bool> add2SongSheet(MusicBasicInfo song, String songSheetName) async {
+  Future<bool> add2SongSheet(BasicMusicInfo song, String songSheetName) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -300,7 +304,7 @@ class DatabaseService extends GetxService {
   }
 
   Future<void> removeSongSheetItem(
-      MusicBasicInfo song, String songSheetName) async {
+      BasicMusicInfo song, String songSheetName) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -323,7 +327,7 @@ class DatabaseService extends GetxService {
         .delete();
   }
 
-  Future<bool> isLike(MusicBasicInfo song) async {
+  Future<bool> isLike(BasicMusicInfo song) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -354,14 +358,13 @@ class DatabaseService extends GetxService {
               o.album.equals(item.album))
           .getSingleOrNull();
       var musicInfo = MusicInfoProvider(info!.sourceType, info.sourceId);
-      var song = SongSheet(
-          name: item.playlistname, newInfo: await musicInfo.getMusicInfo());
+      var song = SongSheet(name: item.playlistname, newInfo: musicInfo);
       songSheets.add(song);
     }
     return songSheets;
   }
 
-  Future<bool> newSongSheet(MusicBasicInfo song, String songSheetName) async {
+  Future<bool> newSongSheet(BasicMusicInfo song, String songSheetName) async {
     await add2AllSong(song);
     var res = await database.managers.allMusicInfos
         .filter((o) =>
@@ -392,12 +395,12 @@ class DatabaseService extends GetxService {
     return true;
   }
 
-  Future<List<MusicBasicInfo>> getSongSheetItems(String songSheetName) async {
+  Future<List<BasicMusicInfo>> getSongSheetItems(String songSheetName) async {
     if (songSheetName == "所有歌曲") {
       var res = await database.managers.allSongs.get();
       return res
           .map((e) =>
-              MusicBasicInfo(album: e.album, artist: e.artist, title: e.title))
+              BasicMusicInfo(album: e.album, artist: e.artist, title: e.title))
           .toList();
     }
     var res = await database.managers.songSheetItems
@@ -406,11 +409,11 @@ class DatabaseService extends GetxService {
         .get();
     return res
         .map((e) =>
-            MusicBasicInfo(album: e.album, artist: e.artist, title: e.title))
+            BasicMusicInfo(album: e.album, artist: e.artist, title: e.title))
         .toList();
   }
 
-  Future<MusicInfo?> getSongInfo(MusicBasicInfo info) async {
+  Future<ExtendMusicInfo?> getSongInfo(BasicMusicInfo info) async {
     var res = await database.managers.allMusicInfos
         .filter((o) =>
             o.title.equals(info.title) &
@@ -423,7 +426,7 @@ class DatabaseService extends GetxService {
     return MusicInfoProvider(res.sourceType, res.sourceId).getMusicInfo();
   }
 
-  Future<bool> changeCurrentPlaylist(List<MusicBasicInfo> songs) async {
+  Future<bool> changeCurrentPlaylist(List<BasicMusicInfo> songs) async {
     await database.managers.currentPlaylistItems.delete();
     for (var song in songs) {
       await database.managers.currentPlaylistItems.create((o) => o(
@@ -436,7 +439,7 @@ class DatabaseService extends GetxService {
   }
 
   Future<bool> deleteItemFromSongSheet(
-      MusicBasicInfo song, String songSheetName) async {
+      BasicMusicInfo song, String songSheetName) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -461,7 +464,7 @@ class DatabaseService extends GetxService {
   }
 
   Future<bool> changeSongInfo(
-      MusicBasicInfo song, MusicBasicInfo newInfo) async {
+      BasicMusicInfo song, BasicMusicInfo newInfo) async {
     var res = await database.managers.allSongs
         .filter((o) =>
             o.title.equals(song.title) &

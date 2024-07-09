@@ -54,22 +54,28 @@ class SongSheetList extends StatelessWidget {
                               },
                               child: Row(
                                 children: [
-                                  CachedNetworkImage(
-                                    httpHeaders: const {
-                                      'User-Agent':
-                                          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-                                    },
-                                    fit: BoxFit.cover,
-                                    height: 70,
-                                    width: 70,
-                                    imageUrl:
-                                        _.songSheets[index].newInfo!.albumArt,
-                                    placeholder: (context, url) => Image.asset(
-                                        'assets/img/default_album.png'),
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset(
-                                            'assets/img/default_album.png'),
-                                  ),
+                                  _.songSheetCoverUrls[index] == null
+                                      ? Image.asset(
+                                          'assets/img/default_album.png',
+                                          height: 70,
+                                          width: 70)
+                                      : CachedNetworkImage(
+                                          httpHeaders: const {
+                                            'User-Agent':
+                                                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+                                          },
+                                          fit: BoxFit.cover,
+                                          height: 70,
+                                          width: 70,
+                                          imageUrl:
+                                              _.songSheetCoverUrls[index] ?? '',
+                                          placeholder: (context, url) =>
+                                              Image.asset(
+                                                  'assets/img/default_album.png'),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(
+                                                  'assets/img/default_album.png'),
+                                        ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 30),
                                     child: Text(
