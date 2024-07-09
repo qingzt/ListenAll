@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:listenall/common/widgets/snack_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../common/api/index.dart';
@@ -83,11 +84,18 @@ class NetworkSearchController extends GetxController {
   }
 
   void addToPlayList(SongWithSource songInfo) async {
-    await add2AllSongFromSearch(songInfo);
+    if (!await add2AllSongFromSearch(songInfo)) {
+      return;
+    }
     await AudioService.to.add2CurrentPlayListAndPlay(songInfo.basicInfo);
   }
 
   Future<bool> add2AllSongFromSearch(SongWithSource song) async {
+    final res1 = await AudioSourceProvider(song.sourceType, song.id).getMedia();
+    if (res1 == null) {
+      MySnackBar.show(message: '歌曲可能需要会员', title: '无法播放该歌曲');
+      return false;
+    }
     var res = await DatabaseService.to.add2AllSong(song.basicInfo);
     res = await DatabaseService.to.add2AudioSource(song);
     res = await DatabaseService.to.add2MusicInfo(song);
@@ -95,20 +103,26 @@ class NetworkSearchController extends GetxController {
   }
 
   Future<bool> add2CurrentPlaylistNext(int index) async {
-    await add2AllSongFromSearch(searchResult[index]);
+    if (!await add2AllSongFromSearch(searchResult[index])) {
+      return false;
+    }
     return await AudioService.to
         .add2CurrentPlayNext(searchResult[index].basicInfo);
   }
 
   void add2SongSheet(int searchIndex, String songSheetName) async {
     var songInfo = searchResult[searchIndex];
-    await add2AllSongFromSearch(songInfo);
+    if (!await add2AllSongFromSearch(songInfo)) {
+      return;
+    }
     await DatabaseService.to.add2SongSheet(songInfo.basicInfo, songSheetName);
   }
 
   void newSongSheet(int searchIndex, String songSheetName) async {
     var songInfo = searchResult[searchIndex];
-    await add2AllSongFromSearch(songInfo);
+    if (!await add2AllSongFromSearch(songInfo)) {
+      return;
+    }
     await DatabaseService.to.newSongSheet(songInfo.basicInfo, songSheetName);
     await initData();
   }
