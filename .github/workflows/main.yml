@@ -67,7 +67,6 @@ jobs:
       id: github_release
       uses: mikepenz/release-changelog-builder-action@v4
       with: 
-        commitMode: true
         configurationJson: |
             {
               "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
