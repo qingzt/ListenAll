@@ -19,4 +19,6 @@ for /f %%f in ('dir /b *.apk') do (
     echo "%%f" renamed to "!newname!"
 )
 
+dir
+
 endlocal
