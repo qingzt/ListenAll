@@ -85,9 +85,13 @@ jobs:
                     "labels": ["test"]
                 },
                 {
-                    "title": "## Other",
-                    "labels": []
+                    "title": "## 📦 Dependencies",
+                    "labels": ["dependencies"]
                 }
+                {
+                    "title": "## 💬 Other",
+                    "labels": ["other"]
+                },
               ],
               "label_extractor": [
                 {
