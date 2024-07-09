@@ -96,7 +96,7 @@ class PlayerController extends GetxController {
       playedDurationSubscription =
           audioService.playedDurationStream.listen((event) {
         playedDuration = event;
-        update(['progressIndicator']);
+        update(['progressIndicator', 'lyrics']);
       });
     });
   }
