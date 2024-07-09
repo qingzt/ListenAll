@@ -457,10 +457,9 @@ packages:
   flutter_lyric:
     dependency: "direct main"
     description:
-      name: flutter_lyric
-      sha256: "5d7e6c46c07b96842a05d5d8af385cb9d715feb7e0f1db1983bc128813c420d7"
-      url: "https://pub.dev"
-    source: hosted
+      path: "plugins/flutter_lyric"
+      relative: true
+    source: path
     version: "2.0.4+6"
   flutter_test:
     dependency: "direct dev"
