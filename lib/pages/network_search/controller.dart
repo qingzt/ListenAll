@@ -115,7 +115,10 @@ class NetworkSearchController extends GetxController {
     if (!await add2AllSongFromSearch(songInfo)) {
       return;
     }
-    await DatabaseService.to.add2SongSheet(songInfo.basicInfo, songSheetName);
+    if (await DatabaseService.to
+        .add2SongSheet(songInfo.basicInfo, songSheetName)) {
+      MySnackBar.show(message: '添加成功', title: '添加到歌单');
+    }
   }
 
   void newSongSheet(int searchIndex, String songSheetName) async {
@@ -123,7 +126,10 @@ class NetworkSearchController extends GetxController {
     if (!await add2AllSongFromSearch(songInfo)) {
       return;
     }
-    await DatabaseService.to.newSongSheet(songInfo.basicInfo, songSheetName);
+    if (await DatabaseService.to
+        .newSongSheet(songInfo.basicInfo, songSheetName)) {
+      MySnackBar.show(message: '添加成功', title: '新建歌单:$songSheetName');
+    }
     await initData();
   }
 }

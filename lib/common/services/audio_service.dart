@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:get/get.dart';
+import 'package:listenall/common/widgets/snack_bar.dart';
 import 'package:media_kit/media_kit.dart';
 import '../models/index.dart';
 import 'database_service.dart';
@@ -15,6 +16,7 @@ class AudioService extends GetxService {
     _player.stream.error.listen((event) {
       // ignore: avoid_print
       print(event);
+      MySnackBar.show(message: event.toString());
     });
     _player.stream.completed.listen((event) {
       if (!event) return;
@@ -170,6 +172,7 @@ class AudioService extends GetxService {
   }
 
   void tryNextSource() {
+    MySnackBar.show(message: '无法播放该资源，自动切换下一资源');
     if (_playlist[_currentPlayListItemIndex].currentSourceIndex <
         _playlist[_currentPlayListItemIndex].sources.length - 1) {
       _playlist[_currentPlayListItemIndex].currentSourceIndex++;
