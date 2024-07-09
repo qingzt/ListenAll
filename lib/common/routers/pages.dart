@@ -12,7 +12,7 @@ class RoutePages {
     ),
     GetPage(
       name: RouteNames.networkSearch,
-      page: () => NetworkSearchPage(),
+      page: () => const NetworkSearchPage(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
