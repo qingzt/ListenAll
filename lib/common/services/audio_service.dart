@@ -119,7 +119,7 @@ class AudioService extends GetxService {
     await _player.seek(newDuration);
   }
 
-  Future<void> _setSource({bool autoPlay = true}) async {
+  Future<void> _setSource({bool autoPlay = true, bool tryNext = true}) async {
     if (_currentPlayListItemIndex < 0) {
       _currentPlayListItemIndex = 0;
     }
@@ -130,7 +130,10 @@ class AudioService extends GetxService {
     final meida =
         await _playlist[_currentPlayListItemIndex].sources[0].getMedia();
     if (meida == null) {
-      tryNextSource();
+      if (tryNext) {
+        currentPlayListItemIndex = _currentPlayListItemIndex;
+        tryNextSource();
+      }
       return;
     }
     await _player.open(meida, play: autoPlay);
@@ -256,7 +259,7 @@ class AudioService extends GetxService {
       print(_playlist.indexWhere((element) => element.basicInfo == song));
       _currentPlayListItemIndex =
           _playlist.indexWhere((element) => element.basicInfo == song);
-      _setSource();
+      _setSource(tryNext: false);
     }
     return res;
   }
