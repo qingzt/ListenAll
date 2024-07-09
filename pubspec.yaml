@@ -62,7 +62,8 @@ dependencies:
   crypto: ^3.0.3
   pointycastle: ^3.9.1
   hex: ^0.2.0
-  flutter_lyric: ^2.0.4+6
+  flutter_lyric:
+    path: plugins/flutter_lyric
 
 dev_dependencies:
   flutter_test:
