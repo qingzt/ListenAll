@@ -25,9 +25,6 @@ class DefaultMusicInfoProvider implements MusicInfoProvider {
   String id;
   @override
   Future<ExtendMusicInfo?> getMusicInfo() async {
-    return ExtendMusicInfo(
-      lyrics: "",
-      albumArt: "",
-    );
+    return null;
   }
 }

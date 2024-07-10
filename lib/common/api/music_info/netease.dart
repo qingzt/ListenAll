@@ -42,6 +42,9 @@ class NeteaseMusicInfoProvider implements MusicInfoProvider {
       } else {
         data2 = res2.data;
       }
+      if (data2['songs'].isEmpty) {
+        return null;
+      }
       String albumArt = data2['songs'][0]['al']['picUrl'];
       return ExtendMusicInfo(
         lyrics: lyrics,
