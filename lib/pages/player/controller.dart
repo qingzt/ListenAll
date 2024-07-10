@@ -79,7 +79,7 @@ class PlayerController extends GetxController {
     playList = AudioService.to.playlist;
     currentMusicInfo = AudioService.to.currentMusicInfo;
     isLike = AudioService.to.isLike;
-    currentPlayListItemIndex = audioService.currentPlayListItemIndex;
+    currentPlayListItemIndex = audioService.targetIndex;
     _initData();
   }
 

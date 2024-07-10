@@ -352,7 +352,7 @@ class DatabaseService extends GetxService {
     List<SongSheet> songSheets = [];
     for (var item in res) {
       if (item.playlistname == "我喜欢的音乐") continue;
-      var info = await database.managers.allAudioSources
+      var info = await database.managers.allMusicInfos
           .filter((o) =>
               o.title.equals(item.title) &
               o.artist.equals(item.artist) &

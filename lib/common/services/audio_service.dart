@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:get/get.dart';
-import 'package:listenall/common/models/music_info.dart';
 import 'package:listenall/common/widgets/snack_bar.dart';
 import 'package:media_kit/media_kit.dart';
 import '../models/index.dart';
@@ -28,31 +27,19 @@ class AudioService extends GetxService {
       next();
     });
     _player.stream.playlist.listen((event) {
-      _playlist[_currentPlayListItemIndex]
-          .infos[0]
-          .getMusicInfo()
-          .then((value) {
-        if (value == null) {
-          tryNextInfo();
-        }
-        currentMusicInfo?.extendInfo = value!;
-        __currentMusicInfoController.add(currentMusicInfo);
-      });
-      currentMusicInfo =
-          MusicInfo(basicInfo: _playlist[_currentPlayListItemIndex].basicInfo);
+      targetIndex = _realIndex;
+      getInfo();
+      currentMusicInfo = MusicInfo(basicInfo: _playlist[_realIndex].basicInfo);
       __currentMusicInfoController.add(currentMusicInfo);
-      _playlistItemIndexController.add(_currentPlayListItemIndex);
-      currentPlayListItemIndex = _currentPlayListItemIndex;
-      DatabaseService.to
-          .isLike(_playlist[_currentPlayListItemIndex].basicInfo)
-          .then((value) {
+      _playlistItemIndexController.add(_realIndex);
+      DatabaseService.to.isLike(_playlist[_realIndex].basicInfo).then((value) {
         _isLikeController.add(value);
         isLike = value;
       });
     });
     await _flushPlayList();
 
-    currentPlayListItemIndex = _currentPlayListItemIndex;
+    targetIndex = _realIndex;
     return this;
   }
 
@@ -111,13 +98,22 @@ class AudioService extends GetxService {
   bool isLike = false;
 
   List<PlayableItem> _playlist = [];
-  int get _currentPlayListItemIndex =>
-      DatabaseService.to.currentPlayListItemIndex;
-  set _currentPlayListItemIndex(int index) {
+  int get _realIndex => DatabaseService.to.currentPlayListItemIndex;
+  set _realIndex(int index) {
     DatabaseService.to.currentPlayListItemIndex = index;
   }
 
-  int currentPlayListItemIndex = 0;
+  int get _sourceIndex => _playlist[_realIndex].currentSourceIndex;
+  set _sourceIndex(int index) {
+    _playlist[_realIndex].currentSourceIndex = index;
+  }
+
+  int get _infoIndex => _playlist[_realIndex].currentInfoIndex;
+  set _infoIndex(int index) {
+    _playlist[_realIndex].currentInfoIndex = index;
+  }
+
+  int targetIndex = 0;
   int playMode = 0;
   // 0: repeat
   // 1: random
@@ -128,25 +124,25 @@ class AudioService extends GetxService {
   }
 
   Future<void> _setSource({bool autoPlay = true, bool tryNext = true}) async {
-    if (_currentPlayListItemIndex < 0) {
-      _currentPlayListItemIndex = 0;
+    if (_realIndex < 0) {
+      _realIndex = 0;
     }
-    if (_playlist.length <= _currentPlayListItemIndex) {
-      _currentPlayListItemIndex = 0;
+    if (_playlist.length <= _realIndex) {
+      _realIndex = 0;
       return;
     }
     Media? media;
-    if (_playlist[_currentPlayListItemIndex].sources.isEmpty) {
+    if (_playlist[_realIndex].sources.isEmpty) {
       MySnackBar.show(message: '当前歌曲无音源');
+      tryNextSource(nextSong: tryNext);
       return;
     }
-    media = await _playlist[_currentPlayListItemIndex]
-        .sources[_playlist[_currentPlayListItemIndex].currentSourceIndex]
+    media = await _playlist[_realIndex]
+        .sources[_playlist[_realIndex].currentSourceIndex]
         .getMedia();
     if (media == null) {
       if (tryNext) {
-        currentPlayListItemIndex = _currentPlayListItemIndex;
-        tryNextSource();
+        tryNextSource(nextSong: true);
       }
       return;
     }
@@ -169,54 +165,63 @@ class AudioService extends GetxService {
     if (_playlist.isEmpty) return;
     switch (playMode) {
       case 0:
-        _currentPlayListItemIndex =
-            (currentPlayListItemIndex + 1) % _playlist.length;
+        _realIndex = (targetIndex + 1) % _playlist.length;
         break;
       case 1:
-        _currentPlayListItemIndex = Random().nextInt(_playlist.length);
+        _realIndex = Random().nextInt(_playlist.length);
         break;
       case 2:
-        _currentPlayListItemIndex =
-            (currentPlayListItemIndex + 1) % _playlist.length;
+        _realIndex = (targetIndex + 1) % _playlist.length;
       default:
     }
     await _setSource();
   }
 
-  void tryNextSource() {
+  void tryNextSource({bool nextSong = false}) {
     MySnackBar.show(message: '无法播放该资源，自动切换下一资源');
-    if (_playlist[_currentPlayListItemIndex].currentSourceIndex <
-        _playlist[_currentPlayListItemIndex].sources.length - 1) {
-      _playlist[_currentPlayListItemIndex].currentSourceIndex++;
+    if (_playlist[_realIndex].currentSourceIndex <
+        _playlist[_realIndex].sources.length - 1) {
+      _playlist[_realIndex].currentSourceIndex++;
       _setSource();
     } else {
-      next();
+      if (nextSong) {
+        targetIndex = _realIndex;
+        next();
+      }
     }
   }
 
+  void getInfo() {
+    _playlist[_realIndex].infos[_infoIndex].getMusicInfo().then((value) {
+      if (value == null) {
+        tryNextInfo();
+        return;
+      }
+      currentMusicInfo?.extendInfo = value;
+      __currentMusicInfoController.add(currentMusicInfo);
+    });
+  }
+
   void tryNextInfo() {
-    if (_playlist[_currentPlayListItemIndex].currentInfoIndex <
-        _playlist[_currentPlayListItemIndex].infos.length - 1) {
-      _playlist[_currentPlayListItemIndex].currentInfoIndex++;
-      _setSource();
+    if (_infoIndex >= _playlist[_realIndex].infos.length) {
+      MySnackBar.show(message: '无法获取歌曲信息');
+      return;
     }
+    _playlist[_realIndex].currentInfoIndex++;
+    getInfo();
   }
 
   Future<void> previous() async {
     if (_playlist.isEmpty) return;
     switch (playMode) {
       case 0:
-        _currentPlayListItemIndex =
-            (currentPlayListItemIndex - 1 + _playlist.length) %
-                _playlist.length;
+        _realIndex = (targetIndex - 1 + _playlist.length) % _playlist.length;
         break;
       case 1:
-        _currentPlayListItemIndex = Random().nextInt(_playlist.length);
+        _realIndex = Random().nextInt(_playlist.length);
         break;
       case 2:
-        _currentPlayListItemIndex =
-            (currentPlayListItemIndex - 1 + _playlist.length) %
-                _playlist.length;
+        _realIndex = (targetIndex - 1 + _playlist.length) % _playlist.length;
         break;
       default:
     }
@@ -229,7 +234,7 @@ class AudioService extends GetxService {
   }
 
   Future<void> selectToPlay(int index) async {
-    _currentPlayListItemIndex = index;
+    _realIndex = index;
     await _setSource();
   }
 
@@ -239,7 +244,7 @@ class AudioService extends GetxService {
   }
 
   void removePlaylistItem(int index) async {
-    if (index == _currentPlayListItemIndex) {
+    if (index == _realIndex) {
       await next();
     }
     await DatabaseService.to
@@ -268,11 +273,10 @@ class AudioService extends GetxService {
     var res = await DatabaseService.to.add2CurrentPlaylist(song);
     if (res) {
       await _flushPlayList();
-      _currentPlayListItemIndex = _playlist.length - 1;
-      _setSource();
+      _realIndex = _playlist.length - 1;
+      _setSource(tryNext: false);
     } else {
-      _currentPlayListItemIndex =
-          _playlist.indexWhere((element) => element.basicInfo == song);
+      _realIndex = _playlist.indexWhere((element) => element.basicInfo == song);
       _setSource(tryNext: false);
     }
     return res;
@@ -280,7 +284,7 @@ class AudioService extends GetxService {
 
   Future<bool> add2CurrentPlayNext(BasicMusicInfo song) async {
     var res = await DatabaseService.to
-        .add2CurrentPlaylistByIndex(song, _currentPlayListItemIndex + 1);
+        .add2CurrentPlaylistByIndex(song, _realIndex + 1);
     if (res) {
       _flushPlayList();
     }
@@ -288,7 +292,7 @@ class AudioService extends GetxService {
   }
 
   Future<void> likeOrUnlike() async {
-    var song = _playlist[_currentPlayListItemIndex].basicInfo;
+    var song = _playlist[_realIndex].basicInfo;
     final res = await DatabaseService.to.likeOrUnlike(song);
     _isLikeController.add(res);
     isLike = res;
