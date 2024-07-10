@@ -12,7 +12,7 @@ class Lyrics extends StatelessWidget {
       id: 'lyrics',
       builder: (_) {
         final lyricsModel = LyricsModelBuilder.create()
-            .bindLyricToMain(_.currentMusicInfo?.lyrics ?? '')
+            .bindLyricToMain(_.currentMusicInfo?.extendInfo?.lyrics ?? '')
             .getModel();
         return SizedBox(
             child: LyricsReader(

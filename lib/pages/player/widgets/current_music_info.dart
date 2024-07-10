@@ -27,14 +27,14 @@ class CurrentMusicInfo extends StatelessWidget {
                       Text(
                         _.currentMusicInfo == null
                             ? '未知音乐'
-                            : _.currentMusicInfo!.title,
+                            : _.currentMusicInfo!.basicInfo.title,
                         style: const TextStyle(
                             fontSize: 20, overflow: TextOverflow.ellipsis),
                       ),
                       Text(
                         _.currentMusicInfo == null
                             ? '未知歌手'
-                            : _.currentMusicInfo!.artist,
+                            : _.currentMusicInfo!.basicInfo.artist,
                         style: const TextStyle(
                             fontSize: 15, overflow: TextOverflow.ellipsis),
                       ),

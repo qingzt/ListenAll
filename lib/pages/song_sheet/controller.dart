@@ -9,8 +9,8 @@ class SongSheetController extends GetxController {
       RefreshController(initialRefresh: true);
   final String songSheetName;
   SongSheetController(this.songSheetName);
-  List<MusicBasicInfo> songSheet = [];
-  MusicInfo? leadingSongInfo;
+  List<BasicMusicInfo> songSheet = [];
+  ExtendMusicInfo? leadingSongInfo;
   initData() async {
     songSheet = await DatabaseService.to.getSongSheetItems(songSheetName);
     update(["song_sheet"]);
@@ -46,9 +46,9 @@ class SongSheetController extends GetxController {
       required String title,
       required String artist,
       required String album}) async {
-    final newInfo = MusicBasicInfo(title: title, artist: artist, album: album);
-    await DatabaseService.to.changeSongInfo(songSheet[index], newInfo);
-    initData();
+    // final newInfo = BasicMusicInfo(title: title, artist: artist, album: album);
+    // await DatabaseService.to.changeSongInfo(songSheet[index], newInfo);
+    // initData();
   }
 
   // @override

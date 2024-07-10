@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../models/index.dart';
+import '../../models/source_item.dart';
 import '../dio_groups.dart';
 import '../index.dart';
 
@@ -23,12 +24,16 @@ class NeteaseSearchProvider extends SearchProvider {
       final data = jsonDecode(res.data)["result"]["songs"];
       for (var item in data) {
         result.add(SongWithSource(
-            basicInfo: MusicBasicInfo(
+            basicInfo: BasicMusicInfo(
                 title: item["name"],
                 artist: item["artists"].map((e) => e["name"]).join("/"),
                 album: item["album"]["name"]),
-            id: item["id"].toString(),
-            sourceType: "netease"));
+            audioSources: [
+              SourceItem(sourceType: "netease", sourceId: item["id"].toString())
+            ],
+            musicInfos: [
+              SourceItem(sourceType: "netease", sourceId: item["id"].toString())
+            ]));
       }
       return result;
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:listenall/common/api/dio_groups.dart';
+import 'package:listenall/common/models/source_item.dart';
 
 import '../../models/music_basic_info.dart';
 import '../../models/song_with_source.dart';
@@ -18,16 +19,16 @@ class BilibiliSearchProvider extends SearchProvider {
       for (var item in data) {
         String title = item['title'];
         title = title.replaceAll(RegExp(r'<[^>]*>'), '');
-        final basicInfo = MusicBasicInfo(
+        final basicInfo = BasicMusicInfo(
           title: title,
           artist: item['author'],
           album: "无",
         );
-        result.add(SongWithSource(
-          basicInfo: basicInfo,
-          id: item['bvid'],
-          sourceType: "bilibili",
-        ));
+        result.add(SongWithSource(basicInfo: basicInfo, audioSources: [
+          SourceItem(sourceType: "bilibili", sourceId: item['bvid'])
+        ], musicInfos: [
+          SourceItem(sourceType: "bilibili", sourceId: item['bvid'])
+        ]));
       }
       return result;
     } catch (e) {

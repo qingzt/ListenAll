@@ -23,6 +23,11 @@ class RoutePages {
       name: RouteNames.songSheet,
       page: () => const SongSheetPage(),
       transition: Transition.rightToLeft,
-    )
+    ),
+    GetPage(
+      name: RouteNames.editMusicInfo,
+      page: () => const EditMusicInfoPage(),
+      transition: Transition.rightToLeft,
+    ),
   ];
 }

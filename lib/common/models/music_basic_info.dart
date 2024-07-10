@@ -1,9 +1,9 @@
-class MusicBasicInfo {
+class BasicMusicInfo {
   final String title;
   final String artist;
   final String album;
 
-  MusicBasicInfo({
+  BasicMusicInfo({
     required this.title,
     required this.artist,
     required this.album,
@@ -13,7 +13,7 @@ class MusicBasicInfo {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MusicBasicInfo &&
+    return other is BasicMusicInfo &&
         other.title == title &&
         other.artist == artist &&
         other.album == album;

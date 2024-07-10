@@ -10,7 +10,7 @@ class NeteaseMusicInfoProvider implements MusicInfoProvider {
   @override
   String id;
   @override
-  Future<MusicInfo?> getMusicInfo() async {
+  Future<ExtendMusicInfo?> getMusicInfo() async {
     try {
       final dio = DioGroups().netease;
       final res = await dio.post('/api/song/lyric', data: {
@@ -36,15 +36,14 @@ class NeteaseMusicInfoProvider implements MusicInfoProvider {
           'crypto': 'eapi',
         }
       });
-      final data2 = jsonDecode(res2.data);
-      String title = data2['songs'][0]['name'];
-      String artist = data2['songs'][0]['ar'].map((e) => e['name']).join("/");
-      String album = data2['songs'][0]['al']['name'];
+      Map<String, dynamic> data2;
+      if (res2.data is String) {
+        data2 = jsonDecode(res2.data);
+      } else {
+        data2 = res2.data;
+      }
       String albumArt = data2['songs'][0]['al']['picUrl'];
-      return MusicInfo(
-        title: title,
-        artist: artist,
-        album: album,
+      return ExtendMusicInfo(
         lyrics: lyrics,
         albumArt: albumArt,
       );

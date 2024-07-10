@@ -1,6 +1,6 @@
 import 'package:listenall/common/api/music_info/netease.dart';
 
-import '../../models/music_info.dart';
+import '../../models/extend_music_info.dart';
 import 'bilibili.dart';
 
 abstract class MusicInfoProvider {
@@ -16,7 +16,7 @@ abstract class MusicInfoProvider {
   }
 
   abstract String id;
-  Future<MusicInfo?> getMusicInfo();
+  Future<ExtendMusicInfo?> getMusicInfo();
 }
 
 class DefaultMusicInfoProvider implements MusicInfoProvider {
@@ -24,11 +24,8 @@ class DefaultMusicInfoProvider implements MusicInfoProvider {
   @override
   String id;
   @override
-  Future<MusicInfo?> getMusicInfo() async {
-    return MusicInfo(
-      title: "未知",
-      artist: "未知",
-      album: "未知",
+  Future<ExtendMusicInfo?> getMusicInfo() async {
+    return ExtendMusicInfo(
       lyrics: "",
       albumArt: "",
     );

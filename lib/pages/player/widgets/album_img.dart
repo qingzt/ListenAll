@@ -17,7 +17,8 @@ class AlbumImg extends StatelessWidget {
           child: GetBuilder<PlayerController>(
         id: 'musicInfo',
         builder: (_) {
-          return _.currentMusicInfo == null
+          return _.currentMusicInfo == null ||
+                  _.currentMusicInfo!.extendInfo == null
               ? Image.asset('assets/img/default_album.png')
               : CachedNetworkImage(
                   httpHeaders: const {
@@ -29,7 +30,7 @@ class AlbumImg extends StatelessWidget {
                       MediaQuery.of(context).size.height / 2), // Add this line
                   width: min(MediaQuery.of(context).size.width / 4 * 3,
                       MediaQuery.of(context).size.height / 2),
-                  imageUrl: _.currentMusicInfo!.albumArt,
+                  imageUrl: _.currentMusicInfo!.extendInfo!.albumArt,
                 );
         },
       )),

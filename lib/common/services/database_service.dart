@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart' as drift;
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:listenall/common/models/source_item.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import '../api/index.dart';
@@ -30,7 +31,7 @@ class DatabaseService extends GetxService {
   set currentPlayListItemIndex(int value) =>
       box.put('currentPlayListItemIndex', value);
 
-  Future<bool> add2AllSong(MusicBasicInfo song) async {
+  Future<bool> add2AllSong(BasicMusicInfo song) async {
     var res = await database.managers.allSongs
         .filter((o) =>
             o.title.equals(song.title) &
@@ -45,7 +46,7 @@ class DatabaseService extends GetxService {
     return true;
   }
 
-  Future<bool> removeFromAllSong(MusicBasicInfo song) async {
+  Future<bool> removeFromAllSong(BasicMusicInfo song) async {
     var res = await database.managers.allSongs
         .filter((o) =>
             o.title.equals(song.title) &
@@ -85,22 +86,24 @@ class DatabaseService extends GetxService {
             o.album.equals(basicInfo.album))
         .orderBy((o) => o.id.asc())
         .get();
-    for (var item in res2) {
-      if (item.sourceType == song.sourceType && item.sourceId == song.id) {
-        return false;
-      }
-    }
     int priority = 0;
     if (res2.isNotEmpty) {
       priority = res2.last.priority + 1;
     }
-    database.managers.allAudioSources.create((o) => o(
-        album: basicInfo.album,
-        artist: basicInfo.artist,
-        title: basicInfo.title,
-        sourceType: song.sourceType,
-        sourceId: song.id,
-        priority: priority));
+    try {
+      for (var item in song.audioSources) {
+        database.managers.allAudioSources.create((o) => o(
+            album: basicInfo.album,
+            artist: basicInfo.artist,
+            title: basicInfo.title,
+            sourceType: item.sourceType,
+            sourceId: item.sourceId,
+            priority: priority));
+        priority++;
+      }
+    } catch (e) {
+      return false;
+    }
     return true;
   }
 
@@ -125,26 +128,28 @@ class DatabaseService extends GetxService {
             o.album.equals(basicInfo.album))
         .orderBy((o) => o.id.asc())
         .get();
-    for (var item in res2) {
-      if (item.sourceType == song.sourceType && item.sourceId == song.id) {
-        return false;
-      }
-    }
     int priority = 0;
     if (res2.isNotEmpty) {
       priority = res2.last.priority + 1;
     }
-    database.managers.allMusicInfos.create((o) => o(
-        album: basicInfo.album,
-        artist: basicInfo.artist,
-        title: basicInfo.title,
-        sourceType: song.sourceType,
-        sourceId: song.id,
-        priority: priority));
+    try {
+      for (var item in song.musicInfos) {
+        database.managers.allMusicInfos.create((o) => o(
+            album: basicInfo.album,
+            artist: basicInfo.artist,
+            title: basicInfo.title,
+            sourceType: item.sourceType,
+            sourceId: item.sourceId,
+            priority: priority));
+        priority++;
+      }
+    } catch (e) {
+      return false;
+    }
     return true;
   }
 
-  Future<bool> add2CurrentPlaylist(MusicBasicInfo song) async {
+  Future<bool> add2CurrentPlaylist(BasicMusicInfo song) async {
     var res = await database.managers.currentPlaylistItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -165,7 +170,7 @@ class DatabaseService extends GetxService {
   }
 
   Future<bool> add2CurrentPlaylistByIndex(
-      MusicBasicInfo song, int index) async {
+      BasicMusicInfo song, int index) async {
     var res = await database.managers.currentPlaylistItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -216,7 +221,7 @@ class DatabaseService extends GetxService {
           .map((e) => MusicInfoProvider(e.sourceType, e.sourceId))
           .toList();
       res.add(PlayableItem(
-        basicInfo: MusicBasicInfo(
+        basicInfo: BasicMusicInfo(
             album: item.album, artist: item.artist, title: item.title),
         sources: musicSources,
         infos: musicInfos,
@@ -225,7 +230,7 @@ class DatabaseService extends GetxService {
     return res;
   }
 
-  Future<void> removeCurrentPlaylistItem(MusicBasicInfo song) async {
+  Future<void> removeCurrentPlaylistItem(BasicMusicInfo song) async {
     CurrentPlaylistItem? current = (await database.managers.currentPlaylistItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -246,7 +251,7 @@ class DatabaseService extends GetxService {
         .delete();
   }
 
-  Future<bool> likeOrUnlike(MusicBasicInfo song) async {
+  Future<bool> likeOrUnlike(BasicMusicInfo song) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -278,7 +283,7 @@ class DatabaseService extends GetxService {
     return true;
   }
 
-  Future<bool> add2SongSheet(MusicBasicInfo song, String songSheetName) async {
+  Future<bool> add2SongSheet(BasicMusicInfo song, String songSheetName) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -300,7 +305,7 @@ class DatabaseService extends GetxService {
   }
 
   Future<void> removeSongSheetItem(
-      MusicBasicInfo song, String songSheetName) async {
+      BasicMusicInfo song, String songSheetName) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -323,7 +328,7 @@ class DatabaseService extends GetxService {
         .delete();
   }
 
-  Future<bool> isLike(MusicBasicInfo song) async {
+  Future<bool> isLike(BasicMusicInfo song) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -354,14 +359,13 @@ class DatabaseService extends GetxService {
               o.album.equals(item.album))
           .getSingleOrNull();
       var musicInfo = MusicInfoProvider(info!.sourceType, info.sourceId);
-      var song = SongSheet(
-          name: item.playlistname, newInfo: await musicInfo.getMusicInfo());
+      var song = SongSheet(name: item.playlistname, newInfo: musicInfo);
       songSheets.add(song);
     }
     return songSheets;
   }
 
-  Future<bool> newSongSheet(MusicBasicInfo song, String songSheetName) async {
+  Future<bool> newSongSheet(BasicMusicInfo song, String songSheetName) async {
     await add2AllSong(song);
     var res = await database.managers.allMusicInfos
         .filter((o) =>
@@ -392,12 +396,12 @@ class DatabaseService extends GetxService {
     return true;
   }
 
-  Future<List<MusicBasicInfo>> getSongSheetItems(String songSheetName) async {
+  Future<List<BasicMusicInfo>> getSongSheetItems(String songSheetName) async {
     if (songSheetName == "所有歌曲") {
       var res = await database.managers.allSongs.get();
       return res
           .map((e) =>
-              MusicBasicInfo(album: e.album, artist: e.artist, title: e.title))
+              BasicMusicInfo(album: e.album, artist: e.artist, title: e.title))
           .toList();
     }
     var res = await database.managers.songSheetItems
@@ -406,24 +410,24 @@ class DatabaseService extends GetxService {
         .get();
     return res
         .map((e) =>
-            MusicBasicInfo(album: e.album, artist: e.artist, title: e.title))
+            BasicMusicInfo(album: e.album, artist: e.artist, title: e.title))
         .toList();
   }
 
-  Future<MusicInfo?> getSongInfo(MusicBasicInfo info) async {
+  Future<ExtendMusicInfo?> getSongInfo(BasicMusicInfo info) async {
     var res = await database.managers.allMusicInfos
         .filter((o) =>
             o.title.equals(info.title) &
             o.artist.equals(info.artist) &
             o.album.equals(info.album))
-        .getSingleOrNull();
-    if (res == null) {
+        .get();
+    if (res.isEmpty) {
       return null;
     }
-    return MusicInfoProvider(res.sourceType, res.sourceId).getMusicInfo();
+    return MusicInfoProvider(res[0].sourceType, res[0].sourceId).getMusicInfo();
   }
 
-  Future<bool> changeCurrentPlaylist(List<MusicBasicInfo> songs) async {
+  Future<bool> changeCurrentPlaylist(List<BasicMusicInfo> songs) async {
     await database.managers.currentPlaylistItems.delete();
     for (var song in songs) {
       await database.managers.currentPlaylistItems.create((o) => o(
@@ -436,7 +440,7 @@ class DatabaseService extends GetxService {
   }
 
   Future<bool> deleteItemFromSongSheet(
-      MusicBasicInfo song, String songSheetName) async {
+      BasicMusicInfo song, String songSheetName) async {
     var res = await database.managers.songSheetItems
         .filter((o) =>
             o.title.equals(song.title) &
@@ -460,8 +464,8 @@ class DatabaseService extends GetxService {
     return true;
   }
 
-  Future<bool> changeSongInfo(
-      MusicBasicInfo song, MusicBasicInfo newInfo) async {
+  Future<bool> updateBasicSongInfo(
+      BasicMusicInfo song, BasicMusicInfo newInfo) async {
     var res = await database.managers.allSongs
         .filter((o) =>
             o.title.equals(song.title) &
@@ -479,5 +483,127 @@ class DatabaseService extends GetxService {
             artist: drift.Value(newInfo.artist),
             title: drift.Value(newInfo.title)));
     return true;
+  }
+
+  Future<bool> addSong(SongWithSource song) async {
+    var res = await database.managers.allSongs
+        .filter((o) =>
+            o.title.equals(song.basicInfo.title) &
+            o.artist.equals(song.basicInfo.artist) &
+            o.album.equals(song.basicInfo.album))
+        .getSingleOrNull();
+    if (res != null) {
+      return false;
+    }
+    await database.managers.allSongs.create((o) => o(
+        album: song.basicInfo.album,
+        artist: song.basicInfo.artist,
+        title: song.basicInfo.title));
+
+    for (int i = 0; i < song.audioSources.length; i++) {
+      await database.managers.allAudioSources.create((o) => o(
+          album: song.basicInfo.album,
+          artist: song.basicInfo.artist,
+          title: song.basicInfo.title,
+          sourceType: song.audioSources[i].sourceType,
+          sourceId: song.audioSources[i].sourceId,
+          priority: i));
+    }
+    for (int i = 0; i < song.musicInfos.length; i++) {
+      await database.managers.allMusicInfos.create((o) => o(
+          album: song.basicInfo.album,
+          artist: song.basicInfo.artist,
+          title: song.basicInfo.title,
+          sourceType: song.musicInfos[i].sourceType,
+          sourceId: song.musicInfos[i].sourceId,
+          priority: i));
+    }
+    return true;
+  }
+
+  Future<bool> updateAudioSources(SongWithSource song) async {
+    var res = await database.managers.allSongs
+        .filter((o) =>
+            o.title.equals(song.basicInfo.title) &
+            o.artist.equals(song.basicInfo.artist) &
+            o.album.equals(song.basicInfo.album))
+        .getSingleOrNull();
+    if (res == null) {
+      return false;
+    }
+    await database.managers.allAudioSources
+        .filter((o) =>
+            o.title.equals(song.basicInfo.title) &
+            o.artist.equals(song.basicInfo.artist) &
+            o.album.equals(song.basicInfo.album))
+        .delete();
+    for (int i = 0; i < song.audioSources.length; i++) {
+      await database.managers.allAudioSources.create((o) => o(
+          album: song.basicInfo.album,
+          artist: song.basicInfo.artist,
+          title: song.basicInfo.title,
+          sourceType: song.audioSources[i].sourceType,
+          sourceId: song.audioSources[i].sourceId,
+          priority: i));
+    }
+    return true;
+  }
+
+  Future<bool> updateMusicInfos(SongWithSource song) async {
+    var res = await database.managers.allSongs
+        .filter((o) =>
+            o.title.equals(song.basicInfo.title) &
+            o.artist.equals(song.basicInfo.artist) &
+            o.album.equals(song.basicInfo.album))
+        .getSingleOrNull();
+    if (res == null) {
+      return false;
+    }
+    await database.managers.allMusicInfos
+        .filter((o) =>
+            o.title.equals(song.basicInfo.title) &
+            o.artist.equals(song.basicInfo.artist) &
+            o.album.equals(song.basicInfo.album))
+        .delete();
+    for (int i = 0; i < song.musicInfos.length; i++) {
+      await database.managers.allMusicInfos.create((o) => o(
+          album: song.basicInfo.album,
+          artist: song.basicInfo.artist,
+          title: song.basicInfo.title,
+          sourceType: song.musicInfos[i].sourceType,
+          sourceId: song.musicInfos[i].sourceId,
+          priority: i));
+    }
+    return true;
+  }
+
+  Future<List<SourceItem>> getAudioSources(BasicMusicInfo song) async {
+    List<SourceItem> res = [];
+    var data = await database.managers.allAudioSources
+        .filter((o) =>
+            o.title.equals(song.title) &
+            o.artist.equals(song.artist) &
+            o.album.equals(song.album))
+        .orderBy((o) => o.priority.asc())
+        .get();
+    for (var item in data) {
+      res.add(SourceItem(sourceType: item.sourceType, sourceId: item.sourceId));
+    }
+    return res;
+  }
+
+  Future<List<SourceItem>> getMusicInfos(BasicMusicInfo song) async {
+    List<SourceItem> res = [];
+    var data = await database.managers.allMusicInfos
+        .filter((o) =>
+            o.title.equals(song.title) &
+            o.artist.equals(song.artist) &
+            o.album.equals(song.album))
+        .orderBy((o) => o.priority.asc())
+        .get();
+    for (var item in data) {
+      res.add(SourceItem(sourceType: item.sourceType, sourceId: item.sourceId));
+    }
+    return res;
   }
 }

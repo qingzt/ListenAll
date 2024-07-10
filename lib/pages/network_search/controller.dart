@@ -91,13 +91,16 @@ class NetworkSearchController extends GetxController {
   }
 
   Future<bool> add2AllSongFromSearch(SongWithSource song) async {
-    final res1 = await AudioSourceProvider(song.sourceType, song.id).getMedia();
+    final res1 = await AudioSourceProvider(
+            song.audioSources[0].sourceType, song.audioSources[0].sourceId)
+        .getMedia();
     if (res1 == null) {
-      MySnackBar.show(message: '歌曲可能需要会员', title: '无法播放该歌曲');
-      return false;
+      MySnackBar.show(message: '歌曲可能需要会员', title: '无法添加到音源');
     }
     var res = await DatabaseService.to.add2AllSong(song.basicInfo);
-    res = await DatabaseService.to.add2AudioSource(song);
+    if (res1 != null) {
+      res = await DatabaseService.to.add2AudioSource(song);
+    }
     res = await DatabaseService.to.add2MusicInfo(song);
     return res;
   }

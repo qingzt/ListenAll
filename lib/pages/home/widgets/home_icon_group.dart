@@ -32,7 +32,9 @@ class HomeIconGroup extends StatelessWidget {
         IconButtonWithText(
           icon: Icons.playlist_add,
           text: '自定义音乐',
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed(RouteNames.editMusicInfo);
+          },
         ),
       ],
     );

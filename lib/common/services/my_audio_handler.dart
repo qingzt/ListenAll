@@ -25,19 +25,19 @@ class MyAudioHandler extends BaseAudioHandler
     mediaItem.add(MediaItem(
       id: _player.currentMusicInfo == null
           ? ""
-          : _player.currentMusicInfo!.albumArt,
+          : _player.currentMusicInfo!.extendInfo!.albumArt,
       album: _player.currentMusicInfo == null
           ? ""
-          : _player.currentMusicInfo!.album,
+          : _player.currentMusicInfo!.basicInfo.album,
       title: _player.currentMusicInfo == null
           ? ""
-          : _player.currentMusicInfo!.title,
+          : _player.currentMusicInfo!.basicInfo.title,
       artist: _player.currentMusicInfo == null
           ? ""
-          : _player.currentMusicInfo!.artist,
+          : _player.currentMusicInfo!.basicInfo.artist,
       artUri: _player.currentMusicInfo == null
           ? Uri.parse("")
-          : Uri.parse(_player.currentMusicInfo!.albumArt),
+          : Uri.parse(_player.currentMusicInfo!.extendInfo!.albumArt),
     ));
     _player.isPlayingStream.listen((isPlaying) {
       if (isPlaying) {
@@ -61,11 +61,15 @@ class MyAudioHandler extends BaseAudioHandler
     _player.currentMusicInfoStream.listen((musicInfo) {
       if (musicInfo != null) {
         mediaItem.add(mediaItem.value?.copyWith(
-          id: musicInfo.albumArt,
-          album: musicInfo.album,
-          title: musicInfo.title,
-          artist: musicInfo.artist,
-          artUri: Uri.parse(musicInfo.albumArt),
+          id: musicInfo.extendInfo == null
+              ? ""
+              : musicInfo.extendInfo!.albumArt,
+          album: musicInfo.basicInfo.album,
+          title: musicInfo.basicInfo.title,
+          artist: musicInfo.basicInfo.artist,
+          artUri: musicInfo.extendInfo == null
+              ? null
+              : Uri.parse(musicInfo.extendInfo!.albumArt),
         ));
       }
     });

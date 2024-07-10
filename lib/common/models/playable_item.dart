@@ -6,7 +6,7 @@ import 'music_basic_info.dart';
 class PlayableItem {
   int currentSourceIndex = 0;
   int currentInfoIndex = 0;
-  MusicBasicInfo basicInfo;
+  BasicMusicInfo basicInfo;
   List<AudioSourceProvider> sources;
   List<MusicInfoProvider> infos;
   PlayableItem(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:listenall/common/models/index.dart';
+import 'package:listenall/common/routers/index.dart';
+import 'package:listenall/common/services/index.dart';
 import 'package:listenall/pages/index.dart';
-import 'package:listenall/pages/song_sheet/widgets/change_info_dialog.dart';
 
 import 'remove_confirm_dialog.dart';
 
@@ -35,8 +37,18 @@ class SongSheetItemOptions extends StatelessWidget {
               ListTile(
                 title: const Text('修改信息'),
                 onTap: () async {
-                  await Get.dialog(ChangeInfoDialog(index: index));
-                  Get.back();
+                  final basicInfo =
+                      Get.find<SongSheetController>().songSheet[index];
+                  final songWithSource = SongWithSource(
+                    basicInfo: basicInfo,
+                    audioSources:
+                        await DatabaseService.to.getAudioSources(basicInfo),
+                    musicInfos:
+                        await DatabaseService.to.getMusicInfos(basicInfo),
+                  );
+                  await Get.toNamed(RouteNames.editMusicInfo,
+                      arguments: songWithSource);
+                  Get.find<SongSheetController>().initData();
                 },
               ),
               ListTile(

@@ -30,7 +30,8 @@ class PlayerBar extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: _.currentMusicInfo != null
+                          child: _.currentMusicInfo != null &&
+                                  _.currentMusicInfo!.extendInfo != null
                               ? CachedNetworkImage(
                                   httpHeaders: const {
                                     'User-Agent':
@@ -39,7 +40,8 @@ class PlayerBar extends StatelessWidget {
                                   fit: BoxFit.cover,
                                   height: 65,
                                   width: 65,
-                                  imageUrl: _.currentMusicInfo!.albumArt,
+                                  imageUrl:
+                                      _.currentMusicInfo!.extendInfo!.albumArt,
                                   placeholder: (context, url) => Image.asset(
                                       'assets/img/default_album.png'),
                                   errorWidget: (context, url, error) =>
@@ -57,7 +59,7 @@ class PlayerBar extends StatelessWidget {
                                 Text(
                                   _.currentMusicInfo == null
                                       ? '未知音乐'
-                                      : _.currentMusicInfo!.title,
+                                      : _.currentMusicInfo!.basicInfo.title,
                                   style: const TextStyle(
                                       fontSize: 15,
                                       overflow: TextOverflow.ellipsis),
@@ -65,7 +67,7 @@ class PlayerBar extends StatelessWidget {
                                 Text(
                                   _.currentMusicInfo == null
                                       ? '未知歌手'
-                                      : _.currentMusicInfo!.artist,
+                                      : _.currentMusicInfo!.basicInfo.artist,
                                   style: const TextStyle(
                                       fontSize: 10,
                                       overflow: TextOverflow.ellipsis),

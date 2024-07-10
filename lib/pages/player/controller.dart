@@ -135,18 +135,12 @@ class PlayerController extends GetxController {
   }
 
   Future<void> add2SongSheet(String songSheetName) async {
-    final MusicBasicInfo musicBasicInfo = MusicBasicInfo(
-        title: currentMusicInfo!.title,
-        artist: currentMusicInfo!.artist,
-        album: currentMusicInfo!.album);
+    final BasicMusicInfo musicBasicInfo = currentMusicInfo!.basicInfo;
     await DatabaseService.to.add2SongSheet(musicBasicInfo, songSheetName);
   }
 
   Future<void> newSongSheet(String name) async {
-    final MusicBasicInfo musicBasicInfo = MusicBasicInfo(
-        title: currentMusicInfo!.title,
-        artist: currentMusicInfo!.artist,
-        album: currentMusicInfo!.album);
+    final BasicMusicInfo musicBasicInfo = currentMusicInfo!.basicInfo;
     await DatabaseService.to.newSongSheet(musicBasicInfo, name);
   }
 }
