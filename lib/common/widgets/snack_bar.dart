@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MySnackBar {
-  static void show({required String message, String title = ''}) {
+  static void show({required String message, String title = '提示'}) {
     Get.snackbar(title, message,
         snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 3),
-        backgroundColor: Theme.of(Get.context!).highlightColor.withOpacity(0.8),
-        colorText: Theme.of(Get.context!).primaryColor);
+        backgroundColor: Get.context == null
+            ? Colors.black
+            : Theme.of(Get.context!).scaffoldBackgroundColor,
+        colorText: Get.context == null
+            ? Colors.white
+            : Theme.of(Get.context!).primaryColor);
   }
 }

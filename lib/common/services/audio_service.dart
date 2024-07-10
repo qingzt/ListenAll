@@ -51,9 +51,15 @@ class AudioService extends GetxService {
       });
     });
     await _flushPlayList();
-    await _setSource(autoPlay: false);
+
     currentPlayListItemIndex = _currentPlayListItemIndex;
     return this;
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    _setSource(autoPlay: false);
   }
 
   static AudioService get to => Get.find<AudioService>();
@@ -129,16 +135,22 @@ class AudioService extends GetxService {
       _currentPlayListItemIndex = 0;
       return;
     }
-    final meida =
-        await _playlist[_currentPlayListItemIndex].sources[0].getMedia();
-    if (meida == null) {
+    Media? media;
+    if (_playlist[_currentPlayListItemIndex].sources.isEmpty) {
+      MySnackBar.show(message: '当前歌曲无音源');
+      return;
+    }
+    media = await _playlist[_currentPlayListItemIndex]
+        .sources[_playlist[_currentPlayListItemIndex].currentSourceIndex]
+        .getMedia();
+    if (media == null) {
       if (tryNext) {
         currentPlayListItemIndex = _currentPlayListItemIndex;
         tryNextSource();
       }
       return;
     }
-    await _player.open(meida, play: autoPlay);
+    await _player.open(media, play: autoPlay);
   }
 
   Future<void> playOrPause() async {
