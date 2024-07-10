@@ -14,10 +14,15 @@ class SongSheetController extends GetxController {
   initData() async {
     songSheet = await DatabaseService.to.getSongSheetItems(songSheetName);
     update(["song_sheet"]);
-    leadingSongInfo = songSheet.isNotEmpty
-        ? await DatabaseService.to.getSongInfo(songSheet.last)
-        : null;
-    update(["leading"]);
+    if (songSheet.isNotEmpty) {
+      DatabaseService.to.getSongInfo(songSheet.last).then((value) {
+        leadingSongInfo = value;
+        update(["leading"]);
+      });
+    } else {
+      leadingSongInfo = null;
+      update(["leading"]);
+    }
     refreshController.refreshCompleted();
   }
 

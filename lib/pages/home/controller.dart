@@ -12,11 +12,15 @@ class HomeController extends GetxController {
   initData() async {
     songSheets = [];
     songSheets = await DatabaseService.to.getSongSheets();
+    update();
     songSheetCoverUrls = List.filled(songSheets.length, null);
     for (var i = 0; i < songSheets.length; i++) {
-      final songSheet = songSheets[i];
-      final res = await songSheet.newInfo?.getMusicInfo();
-      songSheetCoverUrls[i] = res?.albumArt;
+      songSheets[i].newInfo?.getMusicInfo().then((value) {
+        if (value != null) {
+          songSheetCoverUrls[i] = value.albumArt;
+          update();
+        }
+      });
     }
     update();
   }

@@ -64,6 +64,8 @@ dependencies:
   hex: ^0.2.0
   flutter_lyric:
     path: plugins/flutter_lyric
+  flutter_styled_toast: ^2.2.1
+  flutter_native_splash: ^2.4.1
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +95,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/img/default_album.png
+    - assets/img/splash.png
+    - assets/img/android12splash.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

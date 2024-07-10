@@ -21,7 +21,10 @@ class Leading extends StatelessWidget {
             child: Stack(
               children: [
                 _.leadingSongInfo == null
-                    ? Image.asset('assets/img/default_album.png')
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.asset('assets/img/default_album.png'))
                     : CachedNetworkImage(
                         httpHeaders: const {
                           'User-Agent':
@@ -53,7 +56,12 @@ class Leading extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: _.leadingSongInfo == null
-                            ? Image.asset('assets/img/default_album.png')
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                width: MediaQuery.of(context).size.height * 0.2,
+                                child:
+                                    Image.asset('assets/img/default_album.png'))
                             : CachedNetworkImage(
                                 httpHeaders: const {
                                   'User-Agent':

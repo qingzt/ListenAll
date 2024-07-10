@@ -63,7 +63,7 @@ class SourceEdit extends StatelessWidget {
                     final res = await _.save();
                     if (res) {
                       Get.back();
-                      MySnackBar.show(message: '保存成功');
+                      MyToast.show(message: '保存成功');
                     }
                   },
                   child: const Text("保存"),

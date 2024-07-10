@@ -42,7 +42,7 @@ class NeteaseMusicInfoProvider implements MusicInfoProvider {
       } else {
         data2 = res2.data;
       }
-      if (data2['songs'].isEmpty) {
+      if (data2['songs'] == null) {
         return null;
       }
       String albumArt = data2['songs'][0]['al']['picUrl'];
