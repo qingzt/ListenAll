@@ -95,7 +95,7 @@ class NetworkSearchController extends GetxController {
             song.audioSources[0].sourceType, song.audioSources[0].sourceId)
         .getMedia();
     if (res1 == null) {
-      MySnackBar.show(message: '歌曲可能需要会员', title: '无法添加到音源');
+      MyToast.show(message: '歌曲可能需要会员', title: '无法添加到音源');
     }
     var res = await DatabaseService.to.add2AllSong(song.basicInfo);
     if (res1 != null) {
@@ -120,7 +120,7 @@ class NetworkSearchController extends GetxController {
     }
     if (await DatabaseService.to
         .add2SongSheet(songInfo.basicInfo, songSheetName)) {
-      MySnackBar.show(message: '添加成功', title: '添加到歌单');
+      MyToast.show(message: '添加成功', title: '添加到歌单');
     }
   }
 
@@ -131,7 +131,7 @@ class NetworkSearchController extends GetxController {
     }
     if (await DatabaseService.to
         .newSongSheet(songInfo.basicInfo, songSheetName)) {
-      MySnackBar.show(message: '添加成功', title: '新建歌单:$songSheetName');
+      MyToast.show(message: '添加成功', title: '新建歌单:$songSheetName');
     }
     await initData();
   }

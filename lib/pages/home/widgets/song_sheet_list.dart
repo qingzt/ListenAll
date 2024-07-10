@@ -68,7 +68,7 @@ class SongSheetList extends StatelessWidget {
                                           height: 70,
                                           width: 70,
                                           imageUrl:
-                                              _.songSheetCoverUrls[index] ?? '',
+                                              _.songSheetCoverUrls[index]!,
                                           placeholder: (context, url) =>
                                               Image.asset(
                                                   'assets/img/default_album.png'),

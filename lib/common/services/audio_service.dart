@@ -16,7 +16,7 @@ class AudioService extends GetxService {
     _player.stream.error.listen((event) {
       // ignore: avoid_print
       print(event);
-      MySnackBar.show(message: event.toString());
+      MyToast.show(message: event.toString());
     });
     _player.stream.completed.listen((event) {
       if (!event) return;
@@ -133,7 +133,7 @@ class AudioService extends GetxService {
     }
     Media? media;
     if (_playlist[_realIndex].sources.isEmpty) {
-      MySnackBar.show(message: '当前歌曲无音源');
+      MyToast.show(message: '当前歌曲无音源');
       tryNextSource(nextSong: tryNext);
       return;
     }
@@ -178,10 +178,10 @@ class AudioService extends GetxService {
   }
 
   void tryNextSource({bool nextSong = false}) {
-    MySnackBar.show(message: '无法播放该资源，自动切换下一资源');
+    MyToast.show(message: '无法播放该资源，自动切换下一资源');
     if (_playlist[_realIndex].currentSourceIndex <
         _playlist[_realIndex].sources.length - 1) {
-      _playlist[_realIndex].currentSourceIndex++;
+      _sourceIndex++;
       _setSource();
     } else {
       if (nextSong) {
@@ -204,10 +204,10 @@ class AudioService extends GetxService {
 
   void tryNextInfo() {
     if (_infoIndex >= _playlist[_realIndex].infos.length) {
-      MySnackBar.show(message: '无法获取歌曲信息');
+      MyToast.show(message: '无法获取歌曲信息');
       return;
     }
-    _playlist[_realIndex].currentInfoIndex++;
+    _infoIndex++;
     getInfo();
   }
 

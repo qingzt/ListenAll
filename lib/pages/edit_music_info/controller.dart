@@ -69,7 +69,7 @@ class EditMusicInfoController extends GetxController {
       }
     }
     if (!res) {
-      MySnackBar.show(message: '保存失败');
+      MyToast.show(message: '保存失败');
       return false;
     }
     return true;
@@ -110,22 +110,22 @@ class EditMusicInfoController extends GetxController {
   void addAudioSourceFromSearch(int index) {
     final sourceItem = searchResult[index].audioSources[0];
     if (audioSources.contains(sourceItem)) {
-      MySnackBar.show(message: '已经添加过了');
+      MyToast.show(message: '已经添加过了');
       return;
     }
     audioSources.add(sourceItem);
-    MySnackBar.show(message: '添加成功');
+    MyToast.show(message: '添加成功');
     update();
   }
 
   void addMusicInfoFromSearch(int index) {
     final sourceItem = searchResult[index].musicInfos[0];
     if (musicInfos.contains(sourceItem)) {
-      MySnackBar.show(message: '已经添加过了');
+      MyToast.show(message: '已经添加过了');
       return;
     }
     musicInfos.add(sourceItem);
-    MySnackBar.show(message: '添加成功');
+    MyToast.show(message: '添加成功');
     update();
   }
 

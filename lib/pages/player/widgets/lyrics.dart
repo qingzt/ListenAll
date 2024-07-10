@@ -36,15 +36,18 @@ class Lyrics extends StatelessWidget {
                     width: double.infinity,
                   ),
                 ),
-                Text(
-                  Duration(milliseconds: progress)
-                      .toString()
-                      .split('.')
-                      .first
-                      .split(':')
-                      .sublist(1)
-                      .join(':'),
-                  style: TextStyle(color: Theme.of(context).primaryColor),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    Duration(milliseconds: progress)
+                        .toString()
+                        .split('.')
+                        .first
+                        .split(':')
+                        .sublist(1)
+                        .join(':'),
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
                 )
               ],
             );
