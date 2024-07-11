@@ -1,5 +1,4 @@
 {
-    "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
     "categories": [
       {
           "title": "## 🚀 Features",
@@ -21,5 +20,7 @@
           "title": "## 💬 Other",
           "labels": ["other"]
       }
-    ]
+    ],
+    "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details> \n ### Contributors \n #{{CONTRIBUTORS}}",
+    "pr_template": "- #{{TITLE}} (PR ##{{NUMBER}} by @#{{AUTHOR}})"
 }
