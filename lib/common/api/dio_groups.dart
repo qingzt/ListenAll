@@ -44,6 +44,7 @@ class DioGroups {
   // 私有构造函数
   DioGroups._internal() {
     netease = getNeteaseDio();
+    qq = getQQDio();
   }
 
   // 单例实例
@@ -61,6 +62,29 @@ class DioGroups {
     'referer': 'https://www.bilibili.com/',
     'cookie': 'SESSDATA=xxx'
   }));
+
+  late Dio qq;
+  Dio getQQDio() {
+    qq = Dio(BaseOptions(responseType: ResponseType.plain, headers: {
+      'user-agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+      'referer': 'https://y.qq.com/',
+    }));
+    qq.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.responseType = ResponseType.bytes;
+
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          response.data = jsonDecode(utf8.decode(response.data));
+          return handler.next(response);
+        },
+      ),
+    );
+    return qq;
+  }
 
   late Dio netease;
   Dio getNeteaseDio() {

@@ -2,6 +2,7 @@ import 'package:listenall/common/api/music_info/netease.dart';
 
 import '../../models/extend_music_info.dart';
 import 'bilibili.dart';
+import 'qq.dart';
 
 abstract class MusicInfoProvider {
   factory MusicInfoProvider(String source, String id) {
@@ -10,6 +11,8 @@ abstract class MusicInfoProvider {
         return BilibiliMusicInfoProvider(id);
       case 'netease':
         return NeteaseMusicInfoProvider(id);
+      case 'qq':
+        return QQMusicInfoProvider(id);
       default:
         return DefaultMusicInfoProvider(id);
     }
