@@ -62,12 +62,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(PlayerController());
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          QQMusicInfoProvider("0013xCO51dYh8R").getMusicInfo();
-        },
-        child: const Icon(Icons.bug_report),
-      ),
       resizeToAvoidBottomInset: false,
       appBar: const ListenAllAppBar(),
       body: SafeArea(
