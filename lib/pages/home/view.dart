@@ -4,6 +4,9 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:listenall/common/api/audio_source/qq.dart';
+import 'package:listenall/common/api/music_info/qq.dart';
+import 'package:listenall/common/api/search/qq.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/widgets/index.dart';
@@ -61,6 +64,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(PlayerController());
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          QQMusicInfoProvider("0013xCO51dYh8R").getMusicInfo();
+        },
+        child: const Icon(Icons.bug_report),
+      ),
       resizeToAvoidBottomInset: false,
       appBar: const ListenAllAppBar(),
       body: SafeArea(

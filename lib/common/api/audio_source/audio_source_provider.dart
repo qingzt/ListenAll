@@ -2,6 +2,7 @@ import 'package:media_kit/media_kit.dart';
 
 import 'bilibili.dart';
 import 'netease.dart';
+import 'qq.dart';
 
 abstract class AudioSourceProvider {
   factory AudioSourceProvider(String source, String id) {
@@ -10,6 +11,8 @@ abstract class AudioSourceProvider {
         return BilibiliAudioSourceProvider(id);
       case 'netease':
         return NeteaseAudioSourceProvider(id);
+      case 'qq':
+        return QQAudioSourceProvider(id);
       default:
         return DefaultAudioSourceProvider(id);
     }

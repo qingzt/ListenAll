@@ -3,7 +3,6 @@ import 'package:listenall/common/widgets/snack_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../common/api/index.dart';
-import '../../common/api/search/netease.dart';
 import '../../common/models/index.dart';
 import '../../common/services/index.dart';
 
@@ -15,6 +14,7 @@ class NetworkSearchController extends GetxController {
   final String _searchQuery;
   final List<SearchProvider> allSources = [
     NeteaseSearchProvider(),
+    QQSearchProvider(),
     BilibiliSearchProvider(),
   ];
 

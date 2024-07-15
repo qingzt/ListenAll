@@ -110,9 +110,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: BiliBili_Netease
+    - family: SearchIcon
       fonts:
-        - asset: assets/icon/bilibili_netease.ttf
+        - asset: assets/icon/iconfont.ttf
     # - family: Trajan Pro
     #   fonts:
     #     - asset: fonts/TrajanPro.ttf

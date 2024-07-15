@@ -39,6 +39,6 @@ class BilibiliSearchProvider extends SearchProvider {
 
   @override
   Icon getSearchIcon() {
-    return const Icon(IconData(58889, fontFamily: 'BiliBili_Netease'));
+    return const Icon(IconData(58889, fontFamily: 'SearchIcon'));
   }
 }
