@@ -9,6 +9,11 @@ jobs:
   build-and-release:
     runs-on: windows-latest
     
+    permissions:
+      contents: write   # 对仓库内容的读写权限
+      discussions: write
+      pull-requests: read
+
     steps:
     - name: Checkout Repository
       uses: actions/checkout@main
@@ -59,36 +64,11 @@ jobs:
       run: bestzip ..\..\..\..\..\listenall-x86-64-windows.zip *
       working-directory: build\windows\x64\runner\Release\
 
-    - name: Build Changelog
-      id: github_release
-      uses: mikepenz/release-changelog-builder-action@v4
-      with: 
-        configurationJson: |
-            {
-              "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
-              "categories": [
-                {
-                    "title": "## 🚀 Features",
-                    "labels": ["feat", "feature", "enhancement"]
-                },
-                {
-                    "title": "## 🐛 Fixes",
-                    "labels": ["fix", "bug"]
-                },
-                {
-                    "title": "## 🧪 Tests",
-                    "labels": ["test"]
-                },
-                {
-                    "title": "## 📦 Dependencies",
-                    "labels": ["dependencies"]
-                }
-                {
-                    "title": "## 💬 Other",
-                    "labels": ["other"]
-                },
-              ],
-            }
+    # - name: Build Changelog
+    #   id: github_release
+    #   uses: mikepenz/release-changelog-builder-action@v4
+    #   with: 
+    #     configuration: ".github/release-changelog-config.json" 
 
     - name: Create Release
       id: create_release
@@ -96,7 +76,7 @@ jobs:
       with:
         tag_name: ${{ github.ref_name }}
         name: ListenAll ${{ github.ref_name }}
-        body: ${{steps.github_release.outputs.changelog}}
+        # body: ${{steps.github_release.outputs.changelog}}
         draft: false
         prerelease: false
         generate_release_notes: true

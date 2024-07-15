@@ -1,0 +1,26 @@
+{
+    "categories": [
+      {
+          "title": "## 🚀 Features",
+          "labels": ["feat", "feature", "enhancement"]
+      },
+      {
+          "title": "## 🐛 Fixes",
+          "labels": ["fix", "bug"]
+      },
+      {
+          "title": "## 🧪 Tests",
+          "labels": ["test"]
+      },
+      {
+          "title": "## 📦 Dependencies",
+          "labels": ["dependencies"]
+      },
+      {
+          "title": "## 💬 Other",
+          "labels": ["other"]
+      }
+    ],
+    "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details> \n ### Contributors \n #{{CONTRIBUTORS}}",
+    "pr_template": "- #{{TITLE}} (PR ##{{NUMBER}} by @#{{AUTHOR}})"
+}
