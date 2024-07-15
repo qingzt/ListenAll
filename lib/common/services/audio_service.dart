@@ -192,6 +192,7 @@ class AudioService extends GetxService {
   }
 
   void getInfo() {
+    if (_playlist[_realIndex].infos.isEmpty) return;
     _playlist[_realIndex].infos[_infoIndex].getMusicInfo().then((value) {
       if (value == null) {
         tryNextInfo();
@@ -203,7 +204,7 @@ class AudioService extends GetxService {
   }
 
   void tryNextInfo() {
-    if (_infoIndex >= _playlist[_realIndex].infos.length) {
+    if (_infoIndex >= _playlist[_realIndex].infos.length - 1) {
       MyToast.show(message: '无法获取歌曲信息');
       return;
     }
