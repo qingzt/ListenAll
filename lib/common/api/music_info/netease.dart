@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:listenall/common/api/dio_groups.dart';
-
 import '../../models/index.dart';
+import '../dio_groups.dart';
 import 'music_info_provider.dart';
 
 class NeteaseMusicInfoProvider implements MusicInfoProvider {

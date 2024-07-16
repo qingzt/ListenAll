@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:listenall/common/models/index.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../common/models/index.dart';
 import '../../common/services/index.dart';
 
 class SongSheetController extends GetxController {
