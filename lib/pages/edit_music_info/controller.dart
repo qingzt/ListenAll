@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:listenall/common/api/search/netease.dart';
-import 'package:listenall/common/models/index.dart';
-import 'package:listenall/common/models/source_item.dart';
-import 'package:listenall/common/services/index.dart';
-import 'package:listenall/common/widgets/snack_bar.dart';
+
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../common/api/index.dart';
+import '../../common/models/index.dart';
+import '../../common/services/index.dart';
+import '../../common/widgets/snack_bar.dart';
 
 class EditMusicInfoController extends GetxController {
   EditMusicInfoController({this.oldSongWithSource});
@@ -19,10 +18,7 @@ class EditMusicInfoController extends GetxController {
   int currentSourceIndex = 0;
   final RefreshController refreshController =
       RefreshController(initialRefresh: true);
-  final List<SearchProvider> allSources = [
-    NeteaseSearchProvider(),
-    BilibiliSearchProvider(),
-  ];
+  get allSources => SearchProvider.providers;
 
   String? title;
   String? artist;
