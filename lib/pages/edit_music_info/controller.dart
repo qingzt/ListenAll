@@ -7,9 +7,6 @@ import '../../common/api/index.dart';
 import '../../common/models/index.dart';
 import '../../common/services/index.dart';
 import '../../common/widgets/snack_bar.dart';
-import '../../common/models/index.dart';
-import '../../common/services/index.dart';
-import '../../common/widgets/snack_bar.dart';
 
 class EditMusicInfoController extends GetxController {
   EditMusicInfoController({this.oldSongWithSource});

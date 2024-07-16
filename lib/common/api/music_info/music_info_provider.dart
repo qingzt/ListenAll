@@ -3,7 +3,6 @@ import 'package:listenall/common/api/music_info/kuwo.dart';
 import '../../models/extend_music_info.dart';
 import 'bilibili.dart';
 import 'netease.dart';
-import 'netease.dart';
 import 'qq.dart';
 
 abstract class MusicInfoProvider {
