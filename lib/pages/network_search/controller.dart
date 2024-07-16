@@ -12,11 +12,7 @@ class NetworkSearchController extends GetxController {
   final RefreshController refreshController =
       RefreshController(initialRefresh: true);
   final String _searchQuery;
-  final List<SearchProvider> allSources = [
-    NeteaseSearchProvider(),
-    QQSearchProvider(),
-    BilibiliSearchProvider(),
-  ];
+  get allSources => SearchProvider.providers;
 
   initData() async {
     songSheets = await DatabaseService.to.getSongSheets();

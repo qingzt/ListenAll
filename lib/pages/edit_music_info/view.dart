@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:listenall/common/models/index.dart';
-import 'package:listenall/common/widgets/index.dart';
 
+import '../../common/models/index.dart';
+import '../../common/widgets/listenall_app_bar.dart';
 import 'index.dart';
 import 'widgets/basic_info_input.dart';
 import 'widgets/source_edit.dart';

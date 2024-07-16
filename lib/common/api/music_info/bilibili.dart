@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../models/extend_music_info.dart';
+import '../../models/index.dart';
 import 'music_info_provider.dart';
 
 class BilibiliMusicInfoProvider implements MusicInfoProvider {

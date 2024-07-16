@@ -4,9 +4,9 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:listenall/common/api/music_info/qq.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../common/api/music_info/qq.dart';
 import '../../common/widgets/index.dart';
 import '../player/index.dart';
 import 'index.dart';

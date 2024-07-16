@@ -1,10 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:listenall/common/api/dio_groups.dart';
-import 'package:listenall/common/models/source_item.dart';
-
+import '../../models/index.dart';
 import '../../models/music_basic_info.dart';
 import '../../models/song_with_source.dart';
+import '../dio_groups.dart';
 import 'search_provider.dart';
 
 class BilibiliSearchProvider extends SearchProvider {

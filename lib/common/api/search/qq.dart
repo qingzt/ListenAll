@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:listenall/common/api/dio_groups.dart';
+
 import '../../models/index.dart';
+import '../dio_groups.dart';
 import 'search_provider.dart';
 
 class QQSearchProvider extends SearchProvider {

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:listenall/common/models/extend_music_info.dart';
 
+import '../../models/index.dart';
 import '../dio_groups.dart';
 import '../index.dart';
 
