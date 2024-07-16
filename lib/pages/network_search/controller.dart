@@ -91,12 +91,13 @@ class NetworkSearchController extends GetxController {
             song.audioSources[0].sourceType, song.audioSources[0].sourceId)
         .getMedia();
     if (res1 == null) {
-      MyToast.show(message: '歌曲可能需要会员', title: '无法添加到音源');
+      MyToast.show(message: '歌曲可能需要会员', title: '无法添加到音源，但已添加到全部歌曲');
+      await DatabaseService.to.add2AllSong(song.basicInfo);
+      await DatabaseService.to.add2MusicInfo(song);
+      return false;
     }
     var res = await DatabaseService.to.add2AllSong(song.basicInfo);
-    if (res1 != null) {
-      res = await DatabaseService.to.add2AudioSource(song);
-    }
+    res = await DatabaseService.to.add2AudioSource(song);
     res = await DatabaseService.to.add2MusicInfo(song);
     return res;
   }

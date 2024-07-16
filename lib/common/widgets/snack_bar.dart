@@ -24,25 +24,28 @@ class Toast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 80,
-        width: 150,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              offset: const Offset(0, 5),
-              blurRadius: 10,
-            ),
-          ],
-        ),
-        child: Center(
-          child: ListTile(
-            title: Text(title),
-            subtitle: Text(message),
+    return IntrinsicWidth(
+      child: IntrinsicHeight(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                offset: const Offset(0, 5),
+                blurRadius: 10,
+              ),
+            ],
           ),
-        ));
+          child: Center(
+            child: ListTile(
+              title: Text(title),
+              subtitle: Text(message),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

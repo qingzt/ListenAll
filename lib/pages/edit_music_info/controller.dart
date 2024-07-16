@@ -18,7 +18,7 @@ class EditMusicInfoController extends GetxController {
   int currentSourceIndex = 0;
   final RefreshController refreshController =
       RefreshController(initialRefresh: true);
-  get allSources => SearchProvider.providers;
+  List<SearchProvider> get allSources => SearchProvider.providers;
 
   String? title;
   String? artist;
