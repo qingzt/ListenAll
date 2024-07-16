@@ -1,6 +1,7 @@
 import 'package:media_kit/media_kit.dart';
 
 import 'bilibili.dart';
+import 'kuwo.dart';
 import 'netease.dart';
 import 'qq.dart';
 
@@ -13,6 +14,8 @@ abstract class AudioSourceProvider {
         return NeteaseAudioSourceProvider(id);
       case 'qq':
         return QQAudioSourceProvider(id);
+      case 'kuwo':
+        return KuwoAudioSourceProvider(id);
       default:
         return DefaultAudioSourceProvider(id);
     }

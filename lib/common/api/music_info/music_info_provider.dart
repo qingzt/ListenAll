@@ -1,3 +1,5 @@
+import 'package:listenall/common/api/music_info/kuwo.dart';
+
 import '../../models/extend_music_info.dart';
 import 'bilibili.dart';
 import 'netease.dart';
@@ -12,6 +14,8 @@ abstract class MusicInfoProvider {
         return NeteaseMusicInfoProvider(id);
       case 'qq':
         return QQMusicInfoProvider(id);
+      case 'kuwo':
+        return KuwoMusicInfoProvider(id);
       default:
         return DefaultMusicInfoProvider(id);
     }
