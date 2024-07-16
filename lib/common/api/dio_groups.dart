@@ -45,6 +45,7 @@ class DioGroups {
   DioGroups._internal() {
     netease = getNeteaseDio();
     qq = getQQDio();
+    kuwo = getKuwoDio();
   }
 
   // 单例实例
@@ -62,6 +63,99 @@ class DioGroups {
     'referer': 'https://www.bilibili.com/',
     'cookie': 'SESSDATA=xxx'
   }));
+
+  late Dio kuwo;
+  Dio getKuwoDio() {
+    String? h(String t, String? e) {
+      //t = "6z84ajcNmfWrCWS5RswCtkE6Cp7zAByA";
+      //e = "Hm_Iuvt_cdb524f42f23cer9b268564v7y735ewrq2324";
+
+      if (e == null || e.isEmpty) {
+        print('Please enter a password with which to encrypt the message.');
+        return null;
+      }
+
+      String n = '';
+      for (int i = 0; i < e.length; i++) {
+        n += e.codeUnitAt(i).toString();
+      }
+
+      int r = (n.length / 5).floor();
+      int o = int.parse(n[r].toString() +
+          n[2 * r].toString() +
+          n[3 * r].toString() +
+          n[4 * r].toString() +
+          (5 * r >= n.length ? '' : n[5 * r].toString()));
+      int l = (e.length / 2).ceil();
+      int c = (1 << 31) - 1;
+
+      if (o < 2) {
+        print(
+            'Algorithm cannot find a suitable hash. Please choose a different password. \nPossible considerations are to choose a more complex or longer password.');
+        return null;
+      }
+
+      int d = Random().nextInt(1e8.toInt());
+      //d = 52886637;
+      n += d.toString();
+      while (n.length > 10) {
+        int n1 = double.parse(n.substring(0, 10)).toInt();
+        var n22 = n.substring(10);
+        if (n22.contains('e')) {
+          n22 = n22.replaceRange(n22.indexOf('e'), n22.length, '');
+        }
+        double n2 = BigInt.parse(n22).toDouble();
+        n = (n1 + n2).toString();
+      }
+      n = double.parse(n).toInt().toString();
+
+      n = ((o * int.parse(n) + l) % c).toString();
+      String f = '';
+
+      for (int i = 0; i < t.length; i++) {
+        int charCode = t.codeUnitAt(i);
+        int hValue = charCode ^ ((int.parse(n) / c) * 255).floor();
+        f += hValue < 16
+            ? '0${hValue.toRadixString(16)}'
+            : hValue.toRadixString(16);
+        n = ((o * int.parse(n) + l) % c).toString();
+      }
+
+      String dHex = d.toRadixString(16);
+      while (dHex.length < 8) {
+        dHex = '0$dHex';
+      }
+
+      return f + dHex;
+    }
+
+    kuwo = Dio(BaseOptions(headers: {
+      'user-agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0',
+      'referer': 'https://www.kuwo.cn/',
+      'origin': 'https://www.kuwo.cn',
+    }));
+    kuwo.interceptors
+        .add(InterceptorsWrapper(onRequest: (options, handler) async {
+      if (options.headers['cookie'] == null) {
+        final value = await Dio().get('https://www.kuwo.cn');
+        final cookie = value.headers.map['set-cookie']!
+            .map((e) => e.split(';')[0])
+            .join('; ');
+        options.headers['cookie'] = cookie;
+        kuwo.options.headers['cookie'] = cookie;
+        String t = cookie.split('=')[1];
+        String e = cookie.split('=')[0];
+        String? secret = h(t, e);
+        if (secret != null) {
+          options.headers['secret'] = secret;
+          kuwo.options.headers['secret'] = secret;
+        }
+      }
+      return handler.next(options);
+    }));
+    return kuwo;
+  }
 
   late Dio qq;
   Dio getQQDio() {

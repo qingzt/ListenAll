@@ -33,6 +33,9 @@ class QQAudioSourceProvider implements AudioSourceProvider {
           .qq
           .post('https://u.y.qq.com/cgi-bin/musicu.fcg', data: data);
       String url = res.data['req_1']['data']['midurlinfo'][0]['purl'];
+      if (url == "") {
+        return null;
+      }
       url = "http://ws.stream.qqmusic.qq.com/$url";
       return Media(url);
     } catch (e) {

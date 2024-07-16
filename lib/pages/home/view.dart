@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../../common/api/music_info/qq.dart';
 import '../../common/widgets/index.dart';
 import '../player/index.dart';
 import 'index.dart';
