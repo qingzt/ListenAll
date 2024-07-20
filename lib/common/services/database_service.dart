@@ -29,6 +29,8 @@ class DatabaseService extends GetxService {
       box.get('currentPlayListItemIndex', defaultValue: 0);
   set currentPlayListItemIndex(int value) =>
       box.put('currentPlayListItemIndex', value);
+  int get playMode => box.get('playMode', defaultValue: 0);
+  set playMode(int value) => box.put("playMode", value);
 
   Future<bool> add2AllSong(BasicMusicInfo song) async {
     var res = await database.managers.allSongs

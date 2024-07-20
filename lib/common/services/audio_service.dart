@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:get/get.dart';
+import 'package:listenall/common/services/index.dart';
 import 'package:listenall/common/widgets/snack_bar.dart';
 import 'package:media_kit/media_kit.dart';
 import '../models/index.dart';
@@ -114,7 +115,10 @@ class AudioService extends GetxService {
   }
 
   int targetIndex = 0;
-  int playMode = 0;
+  int get playMode => DatabaseService.to.playMode;
+  set playMode(int newMode) {
+    DatabaseService.to.playMode = newMode;
+  }
   // 0: repeat
   // 1: random
   // 2: repeat one
