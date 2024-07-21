@@ -1,0 +1,1 @@
+void app(bool &running);
