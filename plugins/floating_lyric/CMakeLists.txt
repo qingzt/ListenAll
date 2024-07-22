@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(FloatingLyrics)
 
 # 设置C++标准
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenGL REQUIRED)
@@ -17,6 +17,7 @@ add_library(imgui
     imgui/backends/imgui_impl_opengl3.cpp
     imgui/backends/imgui_impl_win32.cpp
     app.cpp
+    style.cpp
 )
 
 # 添加imgui头文件目录
