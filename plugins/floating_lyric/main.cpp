@@ -16,6 +16,7 @@
 #endif
 #include <windows.h>
 #include <GL/GL.h>
+#include <GL/wglext.h>
 #include <tchar.h>
 
 #include "app.h"
@@ -27,6 +28,9 @@ static HGLRC            g_hRC;
 static WGL_WindowData   g_MainWindow;
 static int              g_Width;
 static int              g_Height;
+
+typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC) (int interval);
+PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
 
 // Forward declarations of helper functions
 bool CreateDeviceWGL(HWND hWnd, WGL_WindowData* data);
@@ -96,6 +100,7 @@ int main(int, char**)
         return 1;
     }
     wglMakeCurrent(g_MainWindow.hDC, g_hRC);
+
 
     // Show the window
     ::ShowWindow(hwnd, SW_HIDE);
@@ -242,6 +247,13 @@ bool CreateDeviceWGL(HWND hWnd, WGL_WindowData* data)
     data->hDC = ::GetDC(hWnd);
     if (!g_hRC)
         g_hRC = wglCreateContext(data->hDC);
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+    if (wglSwapIntervalEXT)
+    {
+        // 启用垂直同步
+        wglSwapIntervalEXT(1);
+    }
+
     return true;
 }
 
