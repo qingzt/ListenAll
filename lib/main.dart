@@ -49,6 +49,6 @@ class MyApp extends StatelessWidget {
   }
 
   Color randomColor() {
-    return Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+    return Color((Random().nextDouble() * 0xFFFFFFFF).toInt()).withOpacity(1.0);
   }
 }

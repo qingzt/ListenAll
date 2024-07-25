@@ -80,6 +80,7 @@ class PlayerController extends GetxController {
     currentMusicInfo = AudioService.to.currentMusicInfo;
     isLike = AudioService.to.isLike;
     currentPlayListItemIndex = audioService.targetIndex;
+    playMode = audioService.playMode;
     _initData();
   }
 

@@ -61,3 +61,5 @@ void app(bool &running)
         HideWindowFromTaskbar(hwnd);
     }
 }
+
+void Home(bool show){}

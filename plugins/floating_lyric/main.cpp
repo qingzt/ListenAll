@@ -166,6 +166,8 @@ int main(int, char**)
 
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    // auto font=ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\simhei.ttf", 48.0f);
+    // ImGui::PushFont(font);
 
     // Main loop
     bool running = true;
