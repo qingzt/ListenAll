@@ -33,15 +33,30 @@ class KuwoMusicInfoProvider implements MusicInfoProvider {
       String imgUrl = res['data']['songinfo']['pic'];
       imgUrl = imgUrl.replaceFirst("240", "500");
       List<Map<String, dynamic>> rawlyric = [];
+      List<Map<String, dynamic>> rawTlyric = [];
+      double currentTime = -1;
       for (int i = 0; i < res['data']['lrclist'].length; i++) {
         if (res['data']['lrclist'][i]['lineLyric'] != "//" &&
             res['data']['lrclist'][i]['lineLyric'] != "" &&
             res['data']['lrclist'][i]['lineLyric'] != null) {
-          rawlyric.add(res['data']['lrclist'][i]);
+          if (double.parse(res['data']['lrclist'][i]['time']) == currentTime) {
+            rawTlyric.add(res['data']['lrclist'][i]);
+            currentTime = double.parse(res['data']['lrclist'][i]['time']);
+          } else {
+            rawlyric.add(res['data']['lrclist'][i]);
+            currentTime = double.parse(res['data']['lrclist'][i]['time']);
+          }
         }
       }
-      String lyric = formatLyric(rawlyric);
-      return ExtendMusicInfo(lyrics: lyric, albumArt: imgUrl);
+      String lyric = "";
+      String tlyric = "";
+      if (rawTlyric.isEmpty) {
+        lyric = formatLyric(rawlyric);
+      } else {
+        lyric = formatLyric(rawTlyric);
+        tlyric = formatLyric(rawlyric);
+      }
+      return ExtendMusicInfo(lyrics: lyric, albumArt: imgUrl, tlyrics: tlyric);
     } catch (e) {
       print("caught: $e");
     }

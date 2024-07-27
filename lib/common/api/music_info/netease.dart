@@ -27,6 +27,7 @@ class NeteaseMusicInfoProvider implements MusicInfoProvider {
       });
       final data = jsonDecode(res.data);
       final lyrics = data['lrc']['lyric'];
+      final tlyrics = data['tlyric']['lyric'];
       final res2 = await dio.post('/api/v3/song/detail', data: {
         'data': {
           'c': '[{"id":$id}]',
@@ -46,9 +47,7 @@ class NeteaseMusicInfoProvider implements MusicInfoProvider {
       }
       String albumArt = data2['songs'][0]['al']['picUrl'];
       return ExtendMusicInfo(
-        lyrics: lyrics,
-        albumArt: albumArt,
-      );
+          lyrics: lyrics, albumArt: albumArt, tlyrics: tlyrics);
     } on Exception catch (e) {
       print(e);
     }
