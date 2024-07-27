@@ -48,10 +48,14 @@ class QQMusicInfoProvider implements MusicInfoProvider {
               'https://i.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid=$id&g_tk=5381&format=json&inCharset=utf8&outCharset=utf-8&nobase64=1'))
           .data;
       String lyric = res2['lyric'] ?? '';
+      String tlyric = res2['trans'] ?? '';
       if (lyric.startsWith("[00:00:00]")) {
         lyric = "";
       }
-      return ExtendMusicInfo(lyrics: lyric, albumArt: imgUrl);
+      if (tlyric.startsWith("[00:00:00]")) {
+        tlyric = "";
+      }
+      return ExtendMusicInfo(lyrics: lyric, albumArt: imgUrl, tlyrics: tlyric);
     } on Exception catch (e) {
       print("caught: $e");
     }

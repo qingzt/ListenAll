@@ -13,6 +13,7 @@ class Lyrics extends StatelessWidget {
       builder: (_) {
         final lyricsModel = LyricsModelBuilder.create()
             .bindLyricToMain(_.currentMusicInfo?.extendInfo?.lyrics ?? '')
+            .bindLyricToExt(_.currentMusicInfo?.extendInfo?.tlyrics ?? '')
             .getModel();
         return SizedBox(
             child: LyricsReader(
@@ -61,10 +62,11 @@ class Lyrics extends StatelessWidget {
 class MyLyricsUI extends UINetease {
   @override
   TextStyle getPlayingExtTextStyle() => TextStyle(
-      color: Theme.of(Get.context!).hintColor, fontSize: defaultExtSize);
+      color: Theme.of(Get.context!).primaryColor.withOpacity(0.7),
+      fontSize: defaultExtSize);
   @override
   TextStyle getOtherExtTextStyle() => TextStyle(
-        color: Theme.of(Get.context!).hoverColor,
+        color: Theme.of(Get.context!).highlightColor.withOpacity(0.7),
         fontSize: defaultExtSize,
       );
   @override
