@@ -41,14 +41,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         title: 'Listen All',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: randomColor()),
-          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Color.fromRGBO(Random().nextInt(255),
+                  Random().nextInt(255), Random().nextInt(255), 1)),
         ),
         getPages: RoutePages.list,
         defaultTransition: Transition.native);
-  }
-
-  Color randomColor() {
-    return Color((Random().nextDouble() * 0xFFFFFFFF).toInt()).withOpacity(1.0);
   }
 }

@@ -48,9 +48,9 @@ jobs:
     - name: Build Desktop
       run: flutter build windows  # 或者使用其他平台的命令，例如 flutter build macos 或 flutter build linux
 
-    - name: After Windows Build
-      run:  ..\..\..\..\..\after_windows_build.bat
-      working-directory: build\windows\x64\runner\Release\
+    # - name: After Windows Build
+    #   run:  ..\..\..\..\..\after_windows_build.bat
+    #   working-directory: build\windows\x64\runner\Release\
     
     - name: Install Node.js
       uses: actions/setup-node@main

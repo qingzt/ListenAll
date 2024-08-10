@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.11
+version: 1.0.12
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
@@ -37,8 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   get: ^4.6.6
   media_kit: ^1.1.10                             # Primary package.
-  media_kit_video: ^1.2.4                        # For video rendering.
-  media_kit_libs_video: ^1.0.4                   # Native video dependencies.
+  media_kit_libs_audio: ^1.0.4  
   bitsdojo_window: ^0.1.6
   dio: ^5.4.3+1
   dynamic_color: ^1.7.0
