@@ -1,0 +1,61 @@
+{
+  "type": "float-area",
+  "_widgets": [
+    [
+      {
+        "widget": {
+          "constructionOptions": {
+            "factoryId": "code-editor-opener",
+            "options": {
+              "kind": "navigatable",
+              "uri": "file:///d%3A/Code/listenall/lib/main.dart",
+              "floatAreaId": "217a28e4-1284-466f-b086-0d481d0f0fd0"
+            }
+          },
+          "innerWidgetState": {
+            "cursorState": [
+              {
+                "inSelectionMode": false,
+                "selectionStart": {
+                  "lineNumber": 12,
+                  "column": 8
+                },
+                "position": {
+                  "lineNumber": 12,
+                  "column": 8
+                }
+              }
+            ],
+            "viewState": {
+              "scrollLeft": 0,
+              "firstPosition": {
+                "lineNumber": 11,
+                "column": 1
+              },
+              "firstPositionDeltaTop": -10
+            },
+            "contributionsState": {
+              "editor.contrib.folding": {
+                "lineCount": 52,
+                "provider": "indent",
+                "foldedImports": false
+              },
+              "editor.contrib.wordHighlighter": true
+            }
+          }
+        },
+        "width": 600,
+        "height": 450,
+        "spacing": 0
+      }
+    ]
+  ],
+  "_widths": [
+    600
+  ],
+  "_modelData": {
+    "connections": [],
+    "annotations": [],
+    "highlights": []
+  }
+}
