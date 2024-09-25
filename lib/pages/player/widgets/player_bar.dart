@@ -48,7 +48,11 @@ class PlayerBar extends StatelessWidget {
                                       Image.asset(
                                           'assets/img/default_album.png'),
                                 )
-                              : Image.asset('assets/img/default_album.png'),
+                              : SizedBox(
+                                  height: 65,
+                                  width: 65,
+                                  child: Image.asset(
+                                      'assets/img/default_album.png')),
                         ),
                         Expanded(
                           child: SizedBox(
